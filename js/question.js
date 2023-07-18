@@ -2,6 +2,7 @@ const subject = document.getElementById('subject'); // 問題文
 const subjectRoma = document.getElementById('subjectRoma');
 const input = document.getElementById('input'); // 入力エリア
 const timer = document.getElementById('timer'); // タイマー
+const missCount = document.getElementById('missCount'); // ミスの回数
 
 const romanMap = {
     'あ' : ['a'], 'い' : ['i'], 'う' : ['u'], 'え' : ['e'], 'お' : ['o'],
@@ -61,6 +62,7 @@ let romanArray = [];
 let text = '';
 
 let count = 0; // 正解数
+let miss = 0; // ミスの回数
 let TIME = 20; // 制限時間
 let state = true; // キー入力有効
 
@@ -120,6 +122,12 @@ window.addEventListener('keydown', (event) => {
             }
         }
     }
+
+    if (inputFlag == 0) {
+        miss++;
+        console.log('miss');
+    }
+
     if (nextFlag == 0 && inputFlag == 1) {
         for (let i=0; i<romanArray.length; i++) {
             if (charFlag[i] == 0) {
@@ -187,6 +195,8 @@ const countdown = setInterval(function() {
 // 終了処理
 function finish() {
     clearInterval(countdown);
+    subjectRoma.textContent = '';
     input.textContent = '';
     subject.textContent = '正解数は' + count + '個でした！';
+    missCount.textContent = 'ミスは' + miss + '回でした';
 }
