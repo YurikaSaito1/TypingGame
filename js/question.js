@@ -1,4 +1,5 @@
 const subject = document.getElementById('subject'); // 問題文
+const subjectRoma = document.getElementById('subjectRoma');
 const input = document.getElementById('input'); // 入力エリア
 const timer = document.getElementById('timer'); // タイマー
 
@@ -51,7 +52,7 @@ const textList = [
     'おちゃ',
     'てぃー',
     'こっぷ',
-    'ああ'*/
+    'ああ',*/
     'ココア',
     'ラッシー'
 ];
@@ -68,10 +69,17 @@ function init() {
     const rnd = Math.floor(Math.random() * textList.length);
 
     subject.textContent = textList[rnd]; // 問題文を設定
+
     text = subject.textContent; // 問題文を格納
-
     text = kataToHira(text);
+    subjectRoma.textContent = '';
+    for (let i=0; i=text.length; i++) {
+        determine();
+        subjectRoma.textContent += romanArray[0];
+    }
 
+    text = subject.textContent; // 問題文を格納
+    text = kataToHira(text);
     setChar();
 
     input.textContent = ''; // 入力欄をクリア
@@ -130,6 +138,17 @@ function setChar() {
         setTimeout(function(){ init() }, 100);
     }
 
+    determine();
+}
+
+// カタカナをひらがなに変換
+function kataToHira(str) {
+    return str.replace(/[\u30A1-\u30FA]/g, ch =>
+        String.fromCharCode(ch.charCodeAt(0) - 0x60)
+    );
+    }
+
+function determine() {    
     let romanMapArray = JSON.parse(JSON.stringify(romanMap)); // ヘボン式と訓令式をローマ字に変換し、配列に格納
     if (text.slice(1, 2).match(/[ぃぇぉゃゅょ]/)) {
         let nextChar = text.slice(0, 2);
@@ -147,7 +166,7 @@ function setChar() {
         for (let i=0; i<romanArray2.length; i++){
             romanArray2[i] = romanArray2[i].slice(0, 1) + romanArray2[i];
         }
-        romanArray = romanArray.concat(romanArray2);
+        romanArray = romanArray2.concat(romanArray);
         text = text.slice(2);
     } else {
         let oneChar = text.slice(0, 1); // かな一文字目を取り出す
@@ -155,13 +174,6 @@ function setChar() {
         text = text.slice(1); // 一文字削る
     }
 }
-
-// カタカナをひらがなに変換
-function kataToHira(str) {
-    return str.replace(/[\u30A1-\u30FA]/g, ch =>
-        String.fromCharCode(ch.charCodeAt(0) - 0x60)
-    );
-    }
 
 // カウントダウン
 const countdown = setInterval(function() {

@@ -1,3 +1,14 @@
+#inputRoma {
+    top: 100px;
+    z-index: 0;
+}
+
+#input {
+    top: 100px;
+    color: red;
+    z-index: 1;
+}
+
 #timerArea {
     position: fixed;
     top: 150px;
