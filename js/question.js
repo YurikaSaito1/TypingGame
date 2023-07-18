@@ -97,21 +97,21 @@ window.addEventListener('keydown', (event) => {
     if(!state) return;  // ゲーム終了後は操作できなくする
 
     let charFlag = [];
-    let inputFlag = 0;
-    let nextFlag = 0;
+    let inputFlag = false;
+    let nextFlag = false;
 
     for (let i=0; i<romanArray.length; i++) {
-        charFlag[i] = 0;
+        charFlag[i] = false;
     }
 
     for (let i=0; i<romanArray.length; i++) {
         if (key == romanArray[i].slice(0, 1)) {
-            if (inputFlag == 0) {
+            if (!inputFlag) {
                 input.textContent += romanArray[i].slice(0, 1); // ディスプレイに表示
-                inputFlag = 1;
+                inputFlag = true;
             }
 
-            charFlag[i] = 1;
+            charFlag[i] = true;
 
             romanArray[i] = romanArray[i].slice(1);
             
@@ -123,14 +123,14 @@ window.addEventListener('keydown', (event) => {
         }
     }
 
-    if (inputFlag == 0) {
+    if (!inputFlag) {
         miss++;
         console.log('miss');
     }
 
-    if (nextFlag == 0 && inputFlag == 1) {
+    if (!nextFlag && inputFlag) {
         for (let i=0; i<romanArray.length; i++) {
-            if (charFlag[i] == 0) {
+            if (!charFlag[i]) {
                 romanArray.splice(i, 1);
                 charFlag.splice(i, 1);
             }
