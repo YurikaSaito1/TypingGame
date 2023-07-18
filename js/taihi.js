@@ -49,9 +49,11 @@ const textList = [
     'らーめん',
     'ちゃーはん',
     'おちゃ',
-    'てぃー',*/
+    'てぃー',
     'こっぷ',
-    'ああ'
+    'ああ'*/
+    'ココア',
+    'ラッシー'
 ];
 
 let romanArray = [];
@@ -67,6 +69,9 @@ function init() {
 
     subject.textContent = textList[rnd]; // 問題文を設定
     text = subject.textContent; // 問題文を格納
+
+    text = kataToHira(text);
+
     setChar();
 
     input.textContent = ''; // 入力欄をクリア
@@ -127,8 +132,8 @@ function setChar() {
 
     let romanMapArray = JSON.parse(JSON.stringify(romanMap)); // ヘボン式と訓令式をローマ字に変換し、配列に格納
     if (text.slice(1, 2).match(/[ぃぇぉゃゅょ]/)) {
-        let twoChar = text.slice(0, 2);
-        romanArray = romanMapArray[twoChar];
+        let nextChar = text.slice(0, 2);
+        romanArray = romanMapArray[nextChar];
         text = text.slice(2); // 二文字削る
     } else if (text.slice(0, 1).match(/[っ]/)) {
         let romanArray1 = romanMapArray['っ'];
@@ -150,6 +155,13 @@ function setChar() {
         text = text.slice(1); // 一文字削る
     }
 }
+
+// カタカナをひらがなに変換
+function kataToHira(str) {
+    return str.replace(/[\u30A1-\u30FA]/g, ch =>
+        String.fromCharCode(ch.charCodeAt(0) - 0x60)
+    );
+    }
 
 // カウントダウン
 const countdown = setInterval(function() {
