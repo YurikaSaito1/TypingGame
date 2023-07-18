@@ -18,13 +18,25 @@ const romanMap = {
     'だ' : ['da'], 'ぢ' : ['di'], 'づ' : ['du'], 'で' : ['de'], 'ど' : ['do'],
     'ば' : ['ba'], 'び' : ['bi'], 'ぶ' : ['bu'], 'べ' : ['be'], 'ぼ' : ['bo'],
     'ぱ' : ['pa'], 'ぴ' : ['pi'], 'ぷ' : ['pu'], 'ぺ' : ['pe'], 'ぽ' : ['po'],
-    'ぁ' : ['la', 'xa'], 'ぃ' : ['li', 'xi'], 'ぅ' : ['lu', 'xu'], 'ぇ' : ['le', 'xe'], 'ぉ' : ['lo', 'xo'],
+    'ぁ' : ['la', 'xa'], 'ぃ' : ['li', 'xi'], 'ぅ' : ['lu', 'xu'],
+    'ぇ' : ['le', 'xe'], 'ぉ' : ['lo', 'xo'],
     'ゃ' : ['lya', 'xya'], 'ゅ' : ['lyu', 'xyu'], 'ょ' : ['lyo', 'xyo'], 'っ' : ['ltu', 'xtu'],
-    'ー' : ['-']
+    'うぉ' : ['who'],
+    'きゃ' : ['kya', 'kilya', 'kixya'], 'きゅ' : ['kyu', 'kilyu', 'kixyu'],
+    'きょ' : ['kyo', 'kilyo', 'kixyo'],
+    'しゃ' : ['sya', 'sha', 'shilya', 'shixya','silya', 'sixya'],
+    'しゅ' : ['syu', 'shu', 'shilyu', 'shixyu', 'silyu', 'sixyo'],
+    'しょ' : ['syo', 'sho', 'shilyo', 'shixyo', 'silyo', 'sixyo'],
+    'ちゃ' : ['tya', 'cha', 'tilya', 'tixya', 'chilya', 'chixya'],
+    'ちゅ' : ['tyu', 'chu', 'tilyu', 'tixyu', 'chilyu', 'chixyu'],
+    'ちょ' : ['tyo', 'cho', 'tilyo', 'tixyo', 'chilyo', 'chixyo'], 
+    'てぃ' : ['thi', 'teli', 'texi'],
+    'にゃ' : ['nya'], 'にゅ' : ['nyu'], 'にょ' : ['nyo'],
+    'ー' : ['-'], '、' : [','], '。' : ['.']
 };
 
 const textList = [
-    'りんご',
+    /*'りんご',
     'ばなな',
     'みかん',
     'いちご',
@@ -35,7 +47,11 @@ const textList = [
     'なずな',
     'いも',
     'らーめん',
-    'ちゃーはん'
+    'ちゃーはん',
+    'おちゃ',
+    'てぃー',*/
+    'こっぷ',
+    'ああ'
 ];
 
 let romanArray = [];
@@ -49,11 +65,11 @@ let state = true; // キー入力有効
 function init() {
     const rnd = Math.floor(Math.random() * textList.length);
 
-    subject.textContent = textList[rnd];
+    subject.textContent = textList[rnd]; // 問題文を設定
     text = subject.textContent; // 問題文を格納
     setChar();
 
-    input.textContent = '';
+    input.textContent = ''; // 入力欄をクリア
 }
 
 // ゲーム開始
@@ -65,15 +81,37 @@ window.addEventListener('keydown', (event) => {
 
     if(!state) return;  // ゲーム終了後は操作できなくする
 
-    // ローマ字の一文字目がヘボン式か訓令式か判定
+    let charFlag = [];
+    let inputFlag = 0;
+    let nextFlag = 0;
+
+    for (let i=0; i<romanArray.length; i++) {
+        charFlag[i] = 0;
+    }
+
     for (let i=0; i<romanArray.length; i++) {
         if (key == romanArray[i].slice(0, 1)) {
-            input.textContent += romanArray[i].slice(0, 1);
-            for (let j=0; j<romanArray.length; j++) {
-                romanArray[j] = romanArray[j].slice(1);
+            if (inputFlag == 0) {
+                input.textContent += romanArray[i].slice(0, 1); // ディスプレイに表示
+                inputFlag = 1;
             }
+
+            charFlag[i] = 1;
+
+            romanArray[i] = romanArray[i].slice(1);
+            
             if (romanArray[i].length == 0) {
                 setChar();
+                nextFlag = 1;
+                break;
+            }
+        }
+    }
+    if (nextFlag == 0 && inputFlag == 1) {
+        for (let i=0; i<romanArray.length; i++) {
+            if (charFlag[i] == 0) {
+                romanArray.splice(i, 1);
+                charFlag.splice(i, 1);
             }
         }
     }
@@ -81,17 +119,36 @@ window.addEventListener('keydown', (event) => {
 
 // 判定するかな一文字の設定
 function setChar() {
-    let oneChar = text.slice(0, 1); // かな一文字目を取り出す
-    let romanMapArray = JSON.parse(JSON.stringify(romanMap)); // ヘボン式と訓令式をローマ字に変換し、配列に格納
-    romanArray = romanMapArray[oneChar];
-
     // 文章を入力し終えたら次の問題へ
     if (text.length == 0) {
         count++;
         setTimeout(function(){ init() }, 100);
     }
 
-    text = text.slice(1); // 一文字削る
+    let romanMapArray = JSON.parse(JSON.stringify(romanMap)); // ヘボン式と訓令式をローマ字に変換し、配列に格納
+    if (text.slice(1, 2).match(/[ぃぇぉゃゅょ]/)) {
+        let twoChar = text.slice(0, 2);
+        romanArray = romanMapArray[twoChar];
+        text = text.slice(2); // 二文字削る
+    } else if (text.slice(0, 1).match(/[っ]/)) {
+        let romanArray1 = romanMapArray['っ'];
+        let nextChar = text.slice(1, 2);
+        let romanArray2 = romanMapArray[nextChar];
+        for (let i=0; i<romanArray1.length; i++) {
+            for (let j=0; j<romanArray2.length; j++) {
+                romanArray[i * romanArray2.length + j] = romanArray1[i] + romanArray2[j];
+            }
+        }
+        for (let i=0; i<romanArray2.length; i++){
+            romanArray2[i] = romanArray2[i].slice(0, 1) + romanArray2[i];
+        }
+        romanArray = romanArray.concat(romanArray2);
+        text = text.slice(2);
+    } else {
+        let oneChar = text.slice(0, 1); // かな一文字目を取り出す
+        romanArray = romanMapArray[oneChar];
+        text = text.slice(1); // 一文字削る
+    }
 }
 
 // カウントダウン

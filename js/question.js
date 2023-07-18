@@ -36,7 +36,7 @@ const romanMap = {
 };
 
 const textList = [
-    'りんご',
+    /*'りんご',
     'ばなな',
     'みかん',
     'いちご',
@@ -49,7 +49,9 @@ const textList = [
     'らーめん',
     'ちゃーはん',
     'おちゃ',
-    'てぃー'
+    'てぃー',*/
+    'こっぷ',
+    'ああ'
 ];
 
 let romanArray = [];
@@ -81,17 +83,16 @@ window.addEventListener('keydown', (event) => {
 
     let charFlag = [];
     let inputFlag = 0;
-    let nextChar = 0;
+    let nextFlag = 0;
 
     for (let i=0; i<romanArray.length; i++) {
         charFlag[i] = 0;
     }
 
-    // ローマ字の一文字目がヘボン式か訓令式か判定
     for (let i=0; i<romanArray.length; i++) {
         if (key == romanArray[i].slice(0, 1)) {
             if (inputFlag == 0) {
-                input.textContent += romanArray[i].slice(0, 1);
+                input.textContent += romanArray[i].slice(0, 1); // ディスプレイに表示
                 inputFlag = 1;
             }
 
@@ -101,17 +102,16 @@ window.addEventListener('keydown', (event) => {
             
             if (romanArray[i].length == 0) {
                 setChar();
-                nextChar = 1;
+                nextFlag = 1;
                 break;
             }
         }
     }
-    if (nextChar == 0) {
-        if (inputFlag == 1) {
-            for (let i=0; i<romanArray.length; i++) {
-                if (charFlag[i] == 0) {
-                    romanArray.splice(i, 1);
-                }
+    if (nextFlag == 0 && inputFlag == 1) {
+        for (let i=0; i<romanArray.length; i++) {
+            if (charFlag[i] == 0) {
+                romanArray.splice(i, 1);
+                charFlag.splice(i, 1);
             }
         }
     }
@@ -130,6 +130,20 @@ function setChar() {
         let twoChar = text.slice(0, 2);
         romanArray = romanMapArray[twoChar];
         text = text.slice(2); // 二文字削る
+    } else if (text.slice(0, 1).match(/[っ]/)) {
+        let romanArray1 = romanMapArray['っ'];
+        let nextChar = text.slice(1, 2);
+        let romanArray2 = romanMapArray[nextChar];
+        for (let i=0; i<romanArray1.length; i++) {
+            for (let j=0; j<romanArray2.length; j++) {
+                romanArray[i * romanArray2.length + j] = romanArray1[i] + romanArray2[j];
+            }
+        }
+        for (let i=0; i<romanArray2.length; i++){
+            romanArray2[i] = romanArray2[i].slice(0, 1) + romanArray2[i];
+        }
+        romanArray = romanArray.concat(romanArray2);
+        text = text.slice(2);
     } else {
         let oneChar = text.slice(0, 1); // かな一文字目を取り出す
         romanArray = romanMapArray[oneChar];
