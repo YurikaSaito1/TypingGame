@@ -64,7 +64,7 @@ let text = '';
 let readyCountdown;
 let countdown;
 let count = 0; // 正解数
-let miss = -1; // ミスの回数
+let miss = 0; // ミスの回数
 let READYTIME = 4;
 let TIME = 20; // 制限時間
 let state = true; // キー入力有効
@@ -115,15 +115,9 @@ window.addEventListener('keydown', (event) => {
 
     if(!state) return;  // ゲーム終了後は操作できなくする
 
-    if (key == " " && readyFlag == true) {
-        state = false;
-        readyFlag = false;
-        readyCountdown = setInterval(function() {
-            subject.textContent = --READYTIME;
-            if(READYTIME == 1) {
-                setTimeout(function(){ ready()}, 1000);
-            }
-        }, 1000);
+    if (!readyFlag) {
+        let elem = document.getElementById("key_" + romanArray[0].slice(0, 1));
+        elem.style.backgroundColor = "white";
     }
 
     let charFlag = [];
@@ -136,9 +130,6 @@ window.addEventListener('keydown', (event) => {
 
     for (let i=0; i<romanArray.length; i++) {
         if (key == romanArray[i].slice(0, 1)) {
-            let elem = document.getElementById("key_" + romanArray[0].slice(0, 1));
-            elem.style.backgroundColor = "white";
-
             if (!inputFlag) {
                 input.textContent += romanArray[i].slice(0, 1); // ディスプレイに表示
                 inputFlag = true;
@@ -159,8 +150,10 @@ window.addEventListener('keydown', (event) => {
         }
     }
 
-    if (!inputFlag) {
+    if (!inputFlag && !readyFlag) {
         miss++;
+        elem = document.getElementById("key_" + romanArray[0].slice(0, 1));
+        elem.style.backgroundColor = "lightblue";
     }
 
     if (!nextFlag && inputFlag) {
@@ -170,6 +163,17 @@ window.addEventListener('keydown', (event) => {
                 charFlag.splice(i, 1);
             }
         }
+    }
+
+    if (key == " " && readyFlag == true) {
+        state = false;
+        readyFlag = false;
+        readyCountdown = setInterval(function() {
+            subject.textContent = --READYTIME;
+            if(READYTIME == 1) {
+                setTimeout(function(){ ready()}, 1000);
+            }
+        }, 1000);
     }
 })
 
