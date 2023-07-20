@@ -38,7 +38,7 @@ const romanMap = {
 };
 
 const textList = [
-    /*'りんご',
+    'りんご',
     'ばなな',
     'みかん',
     'いちご',
@@ -53,7 +53,7 @@ const textList = [
     'おちゃ',
     'てぃー',
     'こっぷ',
-    'ああ',*/
+    'ああ',
     'ココア',
     'ラッシー'
 ];
@@ -61,10 +61,29 @@ const textList = [
 let romanArray = [];
 let text = '';
 
+let readyCountdown;
+let countdown;
 let count = 0; // 正解数
-let miss = 0; // ミスの回数
+let miss = -1; // ミスの回数
+let READYTIME = 4;
 let TIME = 20; // 制限時間
 let state = true; // キー入力有効
+let readyFlag = true;
+
+function ready() {
+    clearInterval(readyCountdown);
+
+    init();
+
+    // カウントダウン
+    countdown = setInterval(function() {
+        timer.textContent = '制限時間：' + --TIME + '秒';
+        if(TIME <= 0) {
+            state = false;
+            setTimeout(function(){ finish()}, 500);
+        }
+    }, 1000);
+}
 
 // 開始処理
 function init() {
@@ -85,16 +104,26 @@ function init() {
     setChar();
 
     input.textContent = ''; // 入力欄をクリア
-}
 
-// ゲーム開始
-init();
+    state = true;
+}
 
 // キーが押されたとき
 window.addEventListener('keydown', (event) => {
     let key = event.key;
 
     if(!state) return;  // ゲーム終了後は操作できなくする
+
+    if (key == " " && readyFlag == true) {
+        state = false;
+        readyFlag = false;
+        readyCountdown = setInterval(function() {
+            subject.textContent = --READYTIME;
+            if(READYTIME == 1) {
+                setTimeout(function(){ ready()}, 1000);
+            }
+        }, 1000);
+    }
 
     let charFlag = [];
     let inputFlag = false;
@@ -125,7 +154,6 @@ window.addEventListener('keydown', (event) => {
 
     if (!inputFlag) {
         miss++;
-        console.log('miss');
     }
 
     if (!nextFlag && inputFlag) {
@@ -156,7 +184,7 @@ function kataToHira(str) {
     );
     }
 
-function determine() {    
+function determine() {
     let romanMapArray = JSON.parse(JSON.stringify(romanMap)); // ヘボン式と訓令式をローマ字に変換し、配列に格納
     if (text.slice(1, 2).match(/[ぃぇぉゃゅょ]/)) {
         let nextChar = text.slice(0, 2);
@@ -182,15 +210,6 @@ function determine() {
         text = text.slice(1); // 一文字削る
     }
 }
-
-// カウントダウン
-const countdown = setInterval(function() {
-    timer.textContent = '制限時間：' + --TIME + '秒';
-    if(TIME <= 0) {
-        state = false;
-        setTimeout(function(){ finish()}, 500);
-    }
-}, 1000);
 
 // 終了処理
 function finish() {
