@@ -70,6 +70,7 @@ let TIME = 20; // 制限時間
 let state = true; // キー入力有効
 let readyFlag = true;
 
+// 開始処理
 function ready() {
     clearInterval(readyCountdown);
 
@@ -85,7 +86,7 @@ function ready() {
     }, 1000);
 }
 
-// 開始処理
+// 問題の更新
 function init() {
     const rnd = Math.floor(Math.random() * textList.length);
 
@@ -135,6 +136,9 @@ window.addEventListener('keydown', (event) => {
 
     for (let i=0; i<romanArray.length; i++) {
         if (key == romanArray[i].slice(0, 1)) {
+            let elem = document.getElementById("key_" + romanArray[0].slice(0, 1));
+            elem.style.backgroundColor = "white";
+
             if (!inputFlag) {
                 input.textContent += romanArray[i].slice(0, 1); // ディスプレイに表示
                 inputFlag = true;
@@ -148,6 +152,9 @@ window.addEventListener('keydown', (event) => {
                 setChar();
                 nextFlag = 1;
                 break;
+            } else {
+                elem = document.getElementById("key_" + romanArray[0].slice(0, 1));
+                elem.style.backgroundColor = "lightblue";
             }
         }
     }
@@ -172,9 +179,12 @@ function setChar() {
     if (text.length == 0) {
         count++;
         setTimeout(function(){ init() }, 100);
-    }
+    } else {
+        determine();
 
-    determine();
+        var elem = document.getElementById("key_" + romanArray[0].slice(0, 1));
+        elem.style.backgroundColor = "lightblue";
+    }
 }
 
 // カタカナをひらがなに変換
