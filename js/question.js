@@ -143,9 +143,6 @@ window.addEventListener('keydown', (event) => {
                 setChar();
                 nextFlag = 1;
                 break;
-            } else {
-                elem = document.getElementById("key_" + romanArray[0].slice(0, 1));
-                elem.style.backgroundColor = "lightblue";
             }
         }
     }
@@ -163,8 +160,11 @@ window.addEventListener('keydown', (event) => {
                 charFlag.splice(i, 1);
             }
         }
+        elem = document.getElementById("key_" + romanArray[0].slice(0, 1));
+        elem.style.backgroundColor = "lightblue";
     }
 
+    // スペースキーで開始
     if (key == " " && readyFlag == true) {
         state = false;
         readyFlag = false;
