@@ -58,17 +58,17 @@ const textList = [
     'ラッシー'
 ];
 
-let romanArray = [];
-let text = '';
+let romanArray = []; // 問題文一文字分を格納
+let text = ''; // 問題文を格納
 
-let readyCountdown;
-let countdown;
+let readyCountdown; // 開始時カウントダウン
+let countdown; // 解答時カウントダウン
 let count = 0; // 正解数
-let miss = -1; // ミスの回数
-let READYTIME = 4;
+let miss = 0; // ミスの回数
+let READYTIME = 4; // 開始までの秒数＋１
 let TIME = 20; // 制限時間
 let state = true; // キー入力有効
-let readyFlag = true;
+let readyFlag = true; // 開始したかどうかの判定
 
 // 開始処理
 function ready() {
@@ -92,21 +92,24 @@ function init() {
 
     subject.textContent = textList[rnd]; // 問題文を設定
 
+    // 問題文のローマ字表示
     text = subject.textContent; // 問題文を格納
-    text = kataToHira(text);
+    text = kataToHira(text); // カタカナをひらがなに変換
     subjectRoma.textContent = '';
+    // 全てのローマ字を表示
     for (let i=0; i=text.length; i++) {
         determine();
         subjectRoma.textContent += romanArray[0];
     }
 
+    // 最初の文字のローマ字をセット
     text = subject.textContent; // 問題文を格納
     text = kataToHira(text);
     setChar();
 
     input.textContent = ''; // 入力欄をクリア
 
-    state = true;
+    state = true; // 入力を可能にする
 }
 
 // キーが押されたとき
@@ -115,6 +118,63 @@ window.addEventListener('keydown', (event) => {
 
     if(!state) return;  // ゲーム終了後は操作できなくする
 
+    // キーボードのハイライトをクリア
+    if (!readyFlag) {
+        let elem = document.getElementById("key_" + romanArray[0].slice(0, 1));
+        elem.style.backgroundColor = "white";
+    }
+
+    let charFlag = []; // 入力された文字と同じかどうかの判定
+    let inputFlag = false; // 表示したかどうかの判定
+    let nextFlag = false; // 一文字分打ち終わったかの判定
+
+    // charFlagの初期化
+    for (let i=0; i<romanArray.length; i++) {
+        charFlag[i] = false;
+    }
+
+    for (let i=0; i<romanArray.length; i++) {
+        // 入力キーが正しい時
+        if (key == romanArray[i].slice(0, 1)) {
+            if (!inputFlag) {
+                input.textContent += romanArray[i].slice(0, 1); // ディスプレイに表示
+                inputFlag = true;
+            }
+
+            charFlag[i] = true;
+
+            // 一文字削る
+            romanArray[i] = romanArray[i].slice(1);
+            
+            // かな一文字分入力し終わった時
+            if (romanArray[i].length == 0) {
+                setChar();
+                nextFlag = 1;
+                break;
+            }
+        }
+    }
+
+    // ミスした時
+    if (!inputFlag && !readyFlag) {
+        miss++;
+        elem = document.getElementById("key_" + romanArray[0].slice(0, 1));
+        elem.style.backgroundColor = "lightblue";
+    }
+
+    // 当てはまらない解答を削除
+    if (!nextFlag && inputFlag) {
+        for (let i=0; i<romanArray.length; i++) {
+            if (!charFlag[i]) {
+                romanArray.splice(i, 1);
+                charFlag.splice(i, 1);
+            }
+        }
+        elem = document.getElementById("key_" + romanArray[0].slice(0, 1));
+        elem.style.backgroundColor = "lightblue";
+    }
+
+    // スペースキーで開始
     if (key == " " && readyFlag == true) {
         state = false;
         readyFlag = false;
@@ -124,52 +184,6 @@ window.addEventListener('keydown', (event) => {
                 setTimeout(function(){ ready()}, 1000);
             }
         }, 1000);
-    }
-
-    let charFlag = [];
-    let inputFlag = false;
-    let nextFlag = false;
-
-    for (let i=0; i<romanArray.length; i++) {
-        charFlag[i] = false;
-    }
-
-    for (let i=0; i<romanArray.length; i++) {
-        if (key == romanArray[i].slice(0, 1)) {
-            let elem = document.getElementById("key_" + romanArray[0].slice(0, 1));
-            elem.style.backgroundColor = "white";
-
-            if (!inputFlag) {
-                input.textContent += romanArray[i].slice(0, 1); // ディスプレイに表示
-                inputFlag = true;
-            }
-
-            charFlag[i] = true;
-
-            romanArray[i] = romanArray[i].slice(1);
-            
-            if (romanArray[i].length == 0) {
-                setChar();
-                nextFlag = 1;
-                break;
-            } else {
-                elem = document.getElementById("key_" + romanArray[0].slice(0, 1));
-                elem.style.backgroundColor = "lightblue";
-            }
-        }
-    }
-
-    if (!inputFlag) {
-        miss++;
-    }
-
-    if (!nextFlag && inputFlag) {
-        for (let i=0; i<romanArray.length; i++) {
-            if (!charFlag[i]) {
-                romanArray.splice(i, 1);
-                charFlag.splice(i, 1);
-            }
-        }
     }
 })
 
