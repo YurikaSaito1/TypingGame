@@ -3,6 +3,16 @@ const subjectRoma = document.getElementById('subjectRoma');
 const input = document.getElementById('input'); // 入力エリア
 const timer = document.getElementById('timer'); // タイマー
 const missCount = document.getElementById('missCount'); // ミスの回数
+const left_fourth = document.getElementById('left_fourth');
+const left_third = document.getElementById('left_third');
+const left_second = document.getElementById('left_second');
+const left_first = document.getElementById('left_first');
+const left_thumb = document.getElementById('left_thumb');
+const right_thumb = document.getElementById('right_thumb');
+const right_first = document.getElementById('right_first');
+const right_second = document.getElementById('right_second');
+const right_third = document.getElementById('right_third');
+const right_fourth = document.getElementById('right_fourth');
 
 const romanMap = {
     'あ' : ['a'], 'い' : ['i'], 'う' : ['u'], 'え' : ['e'], 'お' : ['o'],
@@ -36,6 +46,16 @@ const romanMap = {
     'にゃ' : ['nya'], 'にゅ' : ['nyu'], 'にょ' : ['nyo'],
     'ー' : ['-'], '、' : [','], '。' : ['.']
 };
+
+const leftFourth = ['1', 'a', 'q', 'z'];
+const leftThird = ['2', 'w', 's', 'x'];
+const leftSecond = ['3', 'e', 'd', 'c'];
+const leftFirst = ['4', '5', 'r', 't', 'f', 'g', 'v', 'b'];
+const thumb = [' '];
+const rightFirst = ['6', '7', 'y', 'u', 'h', 'j', 'n', 'm'];
+const rightSecond = ['8', 'i', 'k', ','];
+const rightThird = ['9', 'o', 'l', '.'];
+const rightFourth = ['0', '-', 'p'];
 
 const textList = [
     'りんご',
@@ -122,6 +142,8 @@ window.addEventListener('keydown', (event) => {
     if (!readyFlag) {
         let elem = document.getElementById("key_" + romanArray[0].slice(0, 1));
         elem.style.backgroundColor = "white";
+
+        clearFinger(romanArray[0].slice(0, 1));
     }
 
     let charFlag = []; // 入力された文字と同じかどうかの判定
@@ -158,8 +180,11 @@ window.addEventListener('keydown', (event) => {
     // ミスした時
     if (!inputFlag && !readyFlag) {
         miss++;
+
         elem = document.getElementById("key_" + romanArray[0].slice(0, 1));
         elem.style.backgroundColor = "lightblue";
+
+        setFinger(romanArray[0].slice(0, 1));
     }
 
     // 当てはまらない解答を削除
@@ -172,6 +197,8 @@ window.addEventListener('keydown', (event) => {
         }
         elem = document.getElementById("key_" + romanArray[0].slice(0, 1));
         elem.style.backgroundColor = "lightblue";
+
+        setFinger(romanArray[0].slice(0, 1));
     }
 
     // スペースキーで開始
@@ -198,6 +225,8 @@ function setChar() {
 
         var elem = document.getElementById("key_" + romanArray[0].slice(0, 1));
         elem.style.backgroundColor = "lightblue";
+
+        setFinger(romanArray[0].slice(0, 1));
     }
 }
 
@@ -235,11 +264,46 @@ function determine() {
     }
 }
 
+function setFinger(roman) {
+    let finger = checkFinger(roman);
+    if (finger == 'thumb') {
+        left_thumb.style.backgroundColor = "lightblue";
+        right_thumb.style.backgroundColor = "lightblue";
+    } else {
+        finger.style.backgroundColor = "lightblue";
+    }
+}
+
+function clearFinger(roman) {
+    let finger = checkFinger(roman);
+    if (finger == 'thumb') {
+        left_thumb.style.backgroundColor = "white";
+        right_thumb.style.backgroundColor = "white";
+    } else {
+        finger.style.backgroundColor = "white";
+    }
+}
+
+function checkFinger(roman) {
+    if (leftFourth.includes(roman))         return left_fourth;
+    else if (leftThird.includes(roman))     return left_third;
+    else if (leftSecond.includes(roman))    return left_second;
+    else if (leftFirst.includes(roman))     return left_first;
+    else if (thumb.includes(roman))         return 'thumb';
+    else if (rightFirst.includes(roman))    return right_first;
+    else if (rightSecond.includes(roman))   return right_second;
+    else if (rightThird.includes(roman))    return right_third;
+    else if (rightFourth.includes(roman))   return right_fourth;
+}
+
 // 終了処理
 function finish() {
     clearInterval(countdown);
     subjectRoma.textContent = '';
     input.textContent = '';
+    let elem = document.getElementById("key_" + romanArray[0].slice(0, 1));
+    elem.style.backgroundColor = "white";
+    clearFinger(romanArray[0].slice(0, 1));
     subject.textContent = '正解数は' + count + '個でした！';
     missCount.textContent = 'ミスは' + miss + '回でした';
 }
