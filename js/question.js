@@ -19,6 +19,7 @@ const right_fourth = document.getElementById('right_fourth');
 const weak = document.getElementById('weak');
 const number = document.getElementById('number');
 const accuracyRate = document.getElementById('accuracyRate');
+const wpm = document.getElementById('wpm');
 
 const romanMap = {
     'あ' : ['a'], 'い' : ['i'], 'う' : ['u'], 'え' : ['e'], 'お' : ['o'],
@@ -92,7 +93,8 @@ let countdown; // 解答時カウントダウン
 let count = 0; // 正解数
 let miss = 0; // ミスの回数
 let READYTIME = 4; // 開始までの秒数＋１
-let TIME = 20; // 制限時間
+const TIME = 20; // 制限時間
+let time = TIME;
 let state = true; // キー入力有効
 let readyFlag = true; // 開始したかどうかの判定
 let weakKeys = new Object();
@@ -106,8 +108,8 @@ function ready() {
 
     // カウントダウン
     countdown = setInterval(function() {
-        timer.textContent = '制限時間：' + --TIME + '秒';
-        if(TIME <= 0) {
+        timer.textContent = '制限時間：' + --time + '秒';
+        if(time <= 0) {
             state = false;
             setTimeout(function(){ finish()}, 500);
         }
@@ -337,6 +339,12 @@ function getAccuracyRate() {
     return accuracy;
 }
 
+function getWpm() {
+    let ans = count / TIME * 60;
+    console.log(TIME);
+    return ans;
+}
+
 // 終了処理
 function finish() {
     clearInterval(countdown);
@@ -350,4 +358,5 @@ function finish() {
     weak.textContent = '苦手キー：' + getWeakKey();
     number.textContent = '入力文字数：' + num;
     accuracyRate.textContent = '正確率：' + getAccuracyRate() + '％';
+    wpm.textContent = 'WPM：' + getWpm();
 }

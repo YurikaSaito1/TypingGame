@@ -226,3 +226,8 @@ body {
     position: fixed;
     top: 170px;
 }
+
+#wpm {
+    position: fixed;
+    top: 190px;
+}
