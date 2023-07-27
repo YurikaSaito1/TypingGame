@@ -17,6 +17,7 @@ const right_second = document.getElementById('right_second');
 const right_third = document.getElementById('right_third');
 const right_fourth = document.getElementById('right_fourth');
 const weak = document.getElementById('weak');
+const number = document.getElementById('number');
 
 const romanMap = {
     'あ' : ['a'], 'い' : ['i'], 'う' : ['u'], 'え' : ['e'], 'お' : ['o'],
@@ -94,6 +95,7 @@ let TIME = 20; // 制限時間
 let state = true; // キー入力有効
 let readyFlag = true; // 開始したかどうかの判定
 let weakKeys = new Object();
+let num = 0; // 文字数
 
 // 開始処理
 function ready() {
@@ -166,6 +168,7 @@ window.addEventListener('keydown', (event) => {
             if (!inputFlag) {
                 input.textContent += romanArray[i].slice(0, 1); // ディスプレイに表示
                 inputFlag = true;
+                num++;
             }
 
             charFlag[i] = true;
@@ -314,14 +317,15 @@ function checkFinger(roman) {
 
 function getWeakKey() {
     let weakRanking = [];
-    if (weakKeys.length === 0) {
+    if (Object.keys(weakKeys).length === 0) {
         return 'なし';
     } else {
         var array = Object.keys(weakKeys).map((k) => ({key: k, value: weakKeys[k]}));
         array.sort((a, b) => b.value - a.value);
         //weakKeys = Object.assign({}, ...array.map((item) => ({[item.key]: item.value,})))
-        for (let i=0; i<array.length, i<3; i++) {
+        for (let i=0; i<array.length; i++) {
             weakRanking[i] = array[i].key;
+            if (i >= 2) break;
         }
         return weakRanking;
     }
@@ -338,4 +342,5 @@ function finish() {
     subject.textContent = '正解数は' + count + '個でした！';
     missCount.textContent = 'ミスは' + miss + '回でした';
     weak.textContent = '苦手キー：' + getWeakKey();
+    number.textContent = '入力文字数：' + num;
 }

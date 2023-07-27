@@ -216,3 +216,13 @@ body {
     position: fixed;
     top: 130px;
 }
+
+#number {
+    position: fixed;
+    top: 150px;
+}
+
+#accuracyRate {
+    position: fixed;
+    top: 170px;
+}
