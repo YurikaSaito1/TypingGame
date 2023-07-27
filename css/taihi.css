@@ -2,6 +2,10 @@ body {
     background-color: white;
 }
 
+#subject {
+    text-align: center;
+}
+
 #hiraSubject {
     position: fixed;
     top: 80px;
@@ -25,8 +29,9 @@ body {
 
 #keyboard_1 {
     position: fixed;
-    top: 220px;
-    left: 100px;
+    top: 245px;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 600px;
     margin: 0 auto;
     display: flex;
@@ -46,8 +51,10 @@ body {
 
 #keyboard_2 {
     position: fixed;
-    top: 265px;
-    left: 120px;
+    top: 290px;
+    left: 50%;
+    padding-left: 35px;
+    transform: translate(-50%, -50%);
     width: 600px;
     margin: 0 auto;
     display: flex;
@@ -67,8 +74,10 @@ body {
 
 #keyboard_3 {
     position: fixed;
-    top: 310px;
-    left: 140px;
+    top: 335px;
+    left: 50%;
+    padding-left: 70px;
+    transform: translate(-50%, -50%);
     width: 600px;
     margin: 0 auto;
     display: flex;
@@ -88,8 +97,10 @@ body {
 
 #keyboard_4 {
     position: fixed;
-    top: 355px;
-    left: 160px;
+    top: 380px;
+    left: 50%;
+    padding-left: 105px;
+    transform: translate(-50%, -50%);
     width: 600px;
     margin: 0 auto;
     display: flex;
@@ -109,8 +120,10 @@ body {
 
 #keyboard_space {
     position: fixed;
-    top: 400px;
-    left: 290px;
+    top: 425px;
+    left: 50%;
+    padding-left: 350px;
+    transform: translate(-50%, -50%);
     width: 600px;
     margin: 0 auto;
     display: flex;
@@ -131,7 +144,8 @@ body {
 #finger {
     position: fixed;
     top: 470px;
-    left: 110px;
+    left: 50%;
+    transform: translate(-50%);
     width: 600px;
     margin: 0 auto;
 }
