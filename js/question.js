@@ -20,6 +20,7 @@ const weak = document.getElementById('weak');
 const number = document.getElementById('number');
 const accuracyRate = document.getElementById('accuracyRate');
 const wpm = document.getElementById('wpm');
+const level = document.getElementById('level');
 
 const romanMap = {
     'あ' : ['a'], 'い' : ['i'], 'う' : ['u'], 'え' : ['e'], 'お' : ['o'],
@@ -341,8 +342,43 @@ function getAccuracyRate() {
 
 function getWpm() {
     let ans = count / TIME * 60;
-    console.log(TIME);
     return ans;
+}
+
+function getLevel() {
+    let ans = '';
+    switch (true) {
+        case count <= 2:
+            return 'E-';
+        case 2 < count && count <= 4:
+            return 'E';
+        case 4 < count && count <= 6:
+            return 'E+';
+        case 6 < count && count <= 8:
+            return 'D-';
+        case 8 < count && count <= 10:
+            return 'D';
+        case 10 < count && count <= 12:
+            return 'D+';
+        case 12 < count && count <= 14:
+            return 'C-';
+        case 14 < count && count <= 16:
+            return 'C';
+        case 16 < count && count <= 18:
+            return 'C+';
+        case 18 < count && count <= 20:
+            return 'B-';
+        case 20 < count && count <= 22:
+            return 'B';
+        case 22 < count && count <= 24:
+            return 'B+';
+        case 24 < count && count <= 26:
+            return 'A-';
+        case 26 < count && count <= 28:
+            return 'A';
+        case 28 < count && count <= 30:
+            return 'A+';
+    }
 }
 
 // 終了処理
@@ -359,4 +395,5 @@ function finish() {
     number.textContent = '入力文字数：' + num;
     accuracyRate.textContent = '正確率：' + getAccuracyRate() + '％';
     wpm.textContent = 'WPM：' + getWpm();
+    level.textContent = 'レベル：' + getLevel();
 }

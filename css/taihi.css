@@ -231,3 +231,8 @@ body {
     position: fixed;
     top: 190px;
 }
+
+#level {
+    position: fixed;
+    top: 210px;
+}
