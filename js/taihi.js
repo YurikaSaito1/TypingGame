@@ -1,3 +1,4 @@
+const body = document.body;
 const subject = document.getElementById('subject'); // 問題文
 const subjectRoma = document.getElementById('subjectRoma');
 const input = document.getElementById('input'); // 入力エリア
@@ -183,6 +184,11 @@ window.addEventListener('keydown', (event) => {
 
     // ミスした時
     if (!inputFlag && !readyFlag) {
+        body.style.backgroundColor = "red";
+        window.setTimeout(function(){
+            body.style.backgroundColor = "white";
+        }, 100);
+
         miss++;
 
         if (key in weakKeys) {
