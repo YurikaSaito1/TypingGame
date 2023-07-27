@@ -18,6 +18,7 @@ const right_third = document.getElementById('right_third');
 const right_fourth = document.getElementById('right_fourth');
 const weak = document.getElementById('weak');
 const number = document.getElementById('number');
+const accuracyRate = document.getElementById('accuracyRate');
 
 const romanMap = {
     'あ' : ['a'], 'い' : ['i'], 'う' : ['u'], 'え' : ['e'], 'お' : ['o'],
@@ -331,6 +332,11 @@ function getWeakKey() {
     }
 }
 
+function getAccuracyRate() {
+    let accuracy = Math.round(num / (num + miss) * 1000) / 10;
+    return accuracy;
+}
+
 // 終了処理
 function finish() {
     clearInterval(countdown);
@@ -343,4 +349,5 @@ function finish() {
     missCount.textContent = 'ミスは' + miss + '回でした';
     weak.textContent = '苦手キー：' + getWeakKey();
     number.textContent = '入力文字数：' + num;
+    accuracyRate.textContent = '正確率：' + getAccuracyRate() + '％';
 }
