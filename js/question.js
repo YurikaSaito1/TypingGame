@@ -1,5 +1,6 @@
 const body = document.body;
 const subject = document.getElementById('subject'); // 問題文
+const hiraSubject = document.getElementById('hiraSubject');
 const subjectRoma = document.getElementById('subjectRoma');
 const input = document.getElementById('input'); // 入力エリア
 const timer = document.getElementById('timer'); // タイマー
@@ -66,28 +67,29 @@ const rightThird = ['9', 'o', 'l', '.'];
 const rightFourth = ['0', '-', 'p'];
 
 const textList = [
-    'りんご',
-    'バナナ',
-    'みかん',
-    'いちご',
-    'ぶどう',
-    'ちくわ',
-    'しそ',
-    'とろろ',
-    'なずな',
-    'いも',
-    'ラーメン',
-    'チャーハン',
-    'おちゃ',
-    'ティー',
-    'コップ',
-    'アイス',
-    'ココア',
-    'ラッシー'
+    ['林檎', 'りんご'],
+    ['バナナ', 'バナナ'],
+    ['みかん', 'みかん'],
+    ['いちご', 'いちご'],
+    ['葡萄', 'ぶどう'],
+    ['ちくわ', 'ちくわ'],
+    ['しそ', 'しそ'],
+    ['とろろ', 'とろろ'],
+    ['なずな', 'なずな'],
+    ['芋', 'いも'],
+    ['ラーメン', 'ラーメン'],
+    ['チャーハン', 'チャーハン'],
+    ['お茶', 'おちゃ'],
+    ['ティー', 'ティー'],
+    ['コップ', 'コップ'],
+    ['アイス', 'アイス'],
+    ['ココア', 'ココア'],
+    ['ラッシー', 'ラッシー']
 ];
 
 let romanArray = []; // 問題文一文字分を格納
 let text = ''; // 問題文を格納
+let hiraText = ''
 
 let readyCountdown; // 開始時カウントダウン
 let countdown; // 解答時カウントダウン
@@ -121,10 +123,11 @@ function ready() {
 function init() {
     const rnd = Math.floor(Math.random() * textList.length);
 
-    subject.textContent = textList[rnd]; // 問題文を設定
+    subject.textContent = textList[rnd][0]; // 問題文を設定
+    hiraSubject.textContent = textList[rnd][1];
 
     // 問題文のローマ字表示
-    text = subject.textContent; // 問題文を格納
+    text = hiraSubject.textContent; // 問題文を格納
     text = kataToHira(text); // カタカナをひらがなに変換
     subjectRoma.textContent = '';
     // 全てのローマ字を表示
@@ -134,7 +137,7 @@ function init() {
     }
 
     // 最初の文字のローマ字をセット
-    text = subject.textContent; // 問題文を格納
+    text = hiraSubject.textContent; // 問題文を格納
     text = kataToHira(text);
     setChar();
 
@@ -385,6 +388,7 @@ function getLevel() {
 function finish() {
     clearInterval(countdown);
     subjectRoma.textContent = '';
+    hiraSubject.textContent = '';
     input.textContent = '';
     timer.textContent = '';
     keyboard.remove();
