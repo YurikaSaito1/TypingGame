@@ -3,6 +3,8 @@ const subjectRoma = document.getElementById('subjectRoma');
 const input = document.getElementById('input'); // 入力エリア
 const timer = document.getElementById('timer'); // タイマー
 const missCount = document.getElementById('missCount'); // ミスの回数
+const keyboard = document.getElementById('keyboard');
+const finger = document.getElementById('finger');
 const left_fourth = document.getElementById('left_fourth');
 const left_third = document.getElementById('left_third');
 const left_second = document.getElementById('left_second');
@@ -13,6 +15,7 @@ const right_first = document.getElementById('right_first');
 const right_second = document.getElementById('right_second');
 const right_third = document.getElementById('right_third');
 const right_fourth = document.getElementById('right_fourth');
+const weak = document.getElementById('weak');
 
 const romanMap = {
     'あ' : ['a'], 'い' : ['i'], 'う' : ['u'], 'え' : ['e'], 'お' : ['o'],
@@ -59,7 +62,7 @@ const rightFourth = ['0', '-', 'p'];
 
 const textList = [
     'りんご',
-    'ばなな',
+    'バナナ',
     'みかん',
     'いちご',
     'ぶどう',
@@ -68,12 +71,12 @@ const textList = [
     'とろろ',
     'なずな',
     'いも',
-    'らーめん',
-    'ちゃーはん',
+    'ラーメン',
+    'チャーハン',
     'おちゃ',
-    'てぃー',
-    'こっぷ',
-    'ああ',
+    'ティー',
+    'コップ',
+    'アイス',
     'ココア',
     'ラッシー'
 ];
@@ -89,6 +92,7 @@ let READYTIME = 4; // 開始までの秒数＋１
 let TIME = 20; // 制限時間
 let state = true; // キー入力有効
 let readyFlag = true; // 開始したかどうかの判定
+let weakKeys = new Object();
 
 // 開始処理
 function ready() {
@@ -180,6 +184,12 @@ window.addEventListener('keydown', (event) => {
     // ミスした時
     if (!inputFlag && !readyFlag) {
         miss++;
+
+        if (key in weakKeys) {
+            weakKeys[key] += 1;
+        } else {
+            weakKeys[key] = 1;
+        }
 
         elem = document.getElementById("key_" + romanArray[0].slice(0, 1));
         elem.style.backgroundColor = "lightblue";
@@ -296,14 +306,30 @@ function checkFinger(roman) {
     else if (rightFourth.includes(roman))   return right_fourth;
 }
 
+function getWeakKey() {
+    let weakRanking = [];
+    if (weakKeys.length === 0) {
+        return 'なし';
+    } else {
+        var array = Object.keys(weakKeys).map((k) => ({key: k, value: weakKeys[k]}));
+        array.sort((a, b) => b.value - a.value);
+        //weakKeys = Object.assign({}, ...array.map((item) => ({[item.key]: item.value,})))
+        for (let i=0; i<array.length, i<3; i++) {
+            weakRanking[i] = array[i].key;
+        }
+        return weakRanking;
+    }
+}
+
 // 終了処理
 function finish() {
     clearInterval(countdown);
     subjectRoma.textContent = '';
     input.textContent = '';
-    let elem = document.getElementById("key_" + romanArray[0].slice(0, 1));
-    elem.style.backgroundColor = "white";
-    clearFinger(romanArray[0].slice(0, 1));
+    timer.textContent = '';
+    keyboard.remove();
+    finger.remove();
     subject.textContent = '正解数は' + count + '個でした！';
     missCount.textContent = 'ミスは' + miss + '回でした';
+    weak.textContent = '苦手キー：' + getWeakKey();
 }

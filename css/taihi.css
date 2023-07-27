@@ -207,3 +207,8 @@
     top: 20px;
     height: 90px;
 }
+
+#weak {
+    position: fixed;
+    top: 130px;
+}
