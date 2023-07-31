@@ -23,6 +23,7 @@ const number = document.getElementById('number');
 const accuracyRate = document.getElementById('accuracyRate');
 const wpm = document.getElementById('wpm');
 const level = document.getElementById('level');
+const photo = document.getElementById('photo');
 
 const romanMap = {
     'あ' : ['a'], 'い' : ['i'], 'う' : ['u'], 'え' : ['e'], 'お' : ['o'],
@@ -372,8 +373,12 @@ function getWeakKey() {
 }
 
 function getAccuracyRate() {
-    let accuracy = Math.round(num / (num + miss) * 1000) / 10;
-    return accuracy;
+    if (num === 0) {
+        return 0;
+    } else {
+        let accuracy = Math.round(num / (num + miss) * 1000) / 10;
+        return accuracy;
+    }
 }
 
 function getWpm() {
@@ -433,4 +438,7 @@ function finish() {
     accuracyRate.textContent = '正確率：' + getAccuracyRate() + '％';
     wpm.textContent = 'WPM：' + getWpm();
     level.textContent = 'レベル：' + getLevel();
+
+    const rnd = Math.floor(Math.random() * 3);
+    photo.innerHTML = '<img src="img/' + '0' + '.JPG">';
 }
