@@ -6,6 +6,7 @@ const input = document.getElementById('input'); // 入力エリア
 const timer = document.getElementById('timer'); // タイマー
 const missCount = document.getElementById('missCount'); // ミスの回数
 const keyboard = document.getElementById('keyboard');
+const shift = document.getElementById('key_shift')
 const finger = document.getElementById('finger');
 const left_fourth = document.getElementById('left_fourth');
 const left_third = document.getElementById('left_third');
@@ -53,7 +54,8 @@ const romanMap = {
     'ちょ' : ['tyo', 'cho', 'tilyo', 'tixyo', 'chilyo', 'chixyo'], 
     'てぃ' : ['thi', 'teli', 'texi'],
     'にゃ' : ['nya'], 'にゅ' : ['nyu'], 'にょ' : ['nyo'],
-    'ー' : ['-'], '、' : [','], '。' : ['.']
+    'ー' : ['-'], '、' : [','], '。' : ['.'], ';' : [';'], ':' : [':'],
+    '(' : ['('], ')' : [')'], '{' : ['{'], '}' : ['}'], '[' : ['['], ']' : [']']
 };
 
 const leftFourth = ['1', 'a', 'q', 'z'];
@@ -62,42 +64,26 @@ const leftSecond = ['3', 'e', 'd', 'c'];
 const leftFirst = ['4', '5', 'r', 't', 'f', 'g', 'v', 'b'];
 const thumb = [' '];
 const rightFirst = ['6', '7', 'y', 'u', 'h', 'j', 'n', 'm'];
-const rightSecond = ['8', 'i', 'k', ','];
-const rightThird = ['9', 'o', 'l', '.'];
-const rightFourth = ['0', '-', 'p'];
+const rightSecond = ['8', 'i', 'k', ',', '('];
+const rightThird = ['9', 'o', 'l', '.', ')'];
+const rightFourth = ['0', '-', 'p', '[', ';', ':', ']', '{', '}'];
 
-/*const textList = [
-    ['林檎', 'りんご'],
-    ['バナナ', 'バナナ'],
-    ['みかん', 'みかん'],
-    ['いちご', 'いちご'],
-    ['葡萄', 'ぶどう'],
-    ['ちくわ', 'ちくわ'],
-    ['しそ', 'しそ'],
-    ['とろろ', 'とろろ'],
-    ['なずな', 'なずな'],
-    ['芋', 'いも'],
-    ['ラーメン', 'ラーメン'],
-    ['チャーハン', 'チャーハン'],
-    ['お茶', 'おちゃ'],
-    ['ティー', 'ティー'],
-    ['コップ', 'コップ'],
-    ['アイス', 'アイス'],
-    ['ココア', 'ココア'],
-    ['ラッシー', 'ラッシー']
-];*/
+const shiftArray = ['(', ')', '{', '}']
 
 const textList = [
-    ['林檎', 'りんご'],
-    ['バナナ', 'バナナ'],
-    ['蜜柑', 'みかん'],
-    ['苺', 'いちご'],
-    ['葡萄', 'ぶどう'],
-    ['メロン', 'メロン'],
-    ['スイカ', 'スイカ'],
-    ['無花果', 'いちじく'],
-    ['檸檬', 'レモン'],
-    ['さくらんぼ', 'さくらんぼ']
+    ['ヴォイド', 'void'],
+    ['セットアップ', 'setup'],
+    ['ループ', 'loop'],
+    ['デジタルライト', 'digitalWrite'],
+    ['ディレイ', 'delay'],
+    ['カンマ', ','],
+    ['セミコロン', ';'],
+    ['コロン', ':'],
+    ['小カッコ', '()'],
+    ['中カッコ', '{}'],
+    ['角カッコ', '[]'],
+    ['二井見先生', 'にいみせんせい'],
+    ['畠中さん', 'はたなかさん']
 ];
 
 let romanArray = []; // 問題文一文字分を格納
@@ -136,11 +122,11 @@ function ready() {
 function init() {
     const rnd = Math.floor(Math.random() * textList.length);
 
-    subject.textContent = textList[rnd][0]; // 問題文を設定
-    hiraSubject.textContent = textList[rnd][1];
+    hiraSubject.textContent = textList[rnd][0]; // 問題文を設定
+    subject.textContent = textList[rnd][1];
 
     // 問題文のローマ字表示
-    text = hiraSubject.textContent; // 問題文を格納
+    text = subject.textContent; // 問題文を格納
     text = kataToHira(text); // カタカナをひらがなに変換
     subjectRoma.textContent = '';
     // 全てのローマ字を表示
@@ -150,7 +136,7 @@ function init() {
     }
 
     // 最初の文字のローマ字をセット
-    text = hiraSubject.textContent; // 問題文を格納
+    text = subject.textContent; // 問題文を格納
     text = kataToHira(text);
     setChar();
 
@@ -160,15 +146,17 @@ function init() {
 }
 
 // キーが押されたとき
-window.addEventListener('keydown', (event) => {
+window.addEventListener('keypress', (event) => {
     let key = event.key;
 
     if(!state) return;  // ゲーム終了後は操作できなくする
 
     // キーボードのハイライトをクリア
     if (!readyFlag) {
-        let elem = document.getElementById("key_" + romanArray[0].slice(0, 1));
+        var elem = keyMatch(romanArray[0].slice(0, 1));
+        
         elem.style.backgroundColor = "white";
+        shift.style.backgroundColor = "white";
 
         clearFinger(romanArray[0].slice(0, 1));
     }
@@ -220,8 +208,7 @@ window.addEventListener('keydown', (event) => {
             weakKeys[key] = 1;
         }
 
-        elem = document.getElementById("key_" + romanArray[0].slice(0, 1));
-        elem.style.backgroundColor = "lightblue";
+        keyboardColorChange();
 
         setFinger(romanArray[0].slice(0, 1));
     }
@@ -234,8 +221,7 @@ window.addEventListener('keydown', (event) => {
                 charFlag.splice(i, 1);
             }
         }
-        elem = document.getElementById("key_" + romanArray[0].slice(0, 1));
-        elem.style.backgroundColor = "lightblue";
+        keyboardColorChange();
 
         setFinger(romanArray[0].slice(0, 1));
     }
@@ -262,8 +248,7 @@ function setChar() {
     } else {
         determine();
 
-        var elem = document.getElementById("key_" + romanArray[0].slice(0, 1));
-        elem.style.backgroundColor = "lightblue";
+        keyboardColorChange();
 
         setFinger(romanArray[0].slice(0, 1));
     }
@@ -296,10 +281,13 @@ function determine() {
         }
         romanArray = romanArray2.concat(romanArray);
         text = text.slice(2);
-    } else {
+    } else if (text.slice(0, 1).match(/^[ぁ-んー　]*$/)){
         let oneChar = text.slice(0, 1); // かな一文字目を取り出す
         romanArray = romanMapArray[oneChar];
         text = text.slice(1); // 一文字削る
+    } else {
+        romanArray[0] = text.slice(0, 1);
+        text = text.slice(1);
     }
 }
 
@@ -324,15 +312,47 @@ function clearFinger(roman) {
 }
 
 function checkFinger(roman) {
-    if (leftFourth.includes(roman))         return left_fourth;
-    else if (leftThird.includes(roman))     return left_third;
-    else if (leftSecond.includes(roman))    return left_second;
-    else if (leftFirst.includes(roman))     return left_first;
-    else if (thumb.includes(roman))         return 'thumb';
-    else if (rightFirst.includes(roman))    return right_first;
-    else if (rightSecond.includes(roman))   return right_second;
-    else if (rightThird.includes(roman))    return right_third;
-    else if (rightFourth.includes(roman))   return right_fourth;
+    if (leftFourth.includes(roman.toLowerCase()))         return left_fourth;
+    else if (leftThird.includes(roman.toLowerCase()))     return left_third;
+    else if (leftSecond.includes(roman.toLowerCase()))    return left_second;
+    else if (leftFirst.includes(roman.toLowerCase()))     return left_first;
+    else if (thumb.includes(roman.toLowerCase()))         return 'thumb';
+    else if (rightFirst.includes(roman.toLowerCase()))    return right_first;
+    else if (rightSecond.includes(roman.toLowerCase()))   return right_second;
+    else if (rightThird.includes(roman.toLowerCase()))    return right_third;
+    else if (rightFourth.includes(roman.toLowerCase()))   return right_fourth;
+}
+
+function keyMatch(key) {
+    switch (key) {
+        case '(':
+            return document.getElementById("key_8");
+        case ')':
+            return document.getElementById("key_9");
+        case '{':
+            return document.getElementById("key_[");
+        case '}':
+            return document.getElementById("key_]");
+        default:
+            return document.getElementById("key_" + romanArray[0].slice(0, 1).toLowerCase());
+    }
+}
+
+function shiftMatch(key) {
+    if (shiftArray.includes(key) || key.match(/^[A-Z]+$/)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function keyboardColorChange() {
+    var elem = keyMatch(romanArray[0].slice(0, 1));
+    elem.style.backgroundColor = "lightblue";
+    var shiftFlag = shiftMatch(romanArray[0].slice(0, 1));
+    if (shiftFlag) {
+        shift.style.backgroundColor = "lightblue";
+    }
 }
 
 function getWeakKey() {
@@ -407,7 +427,7 @@ function finish() {
     keyboard.remove();
     finger.remove();
     subject.textContent = '正解数は' + count + '個でした！';
-    missCount.textContent = 'ミスは' + miss + '回でした';
+    missCount.textContent = 'ミス：' + miss + '回';
     weak.textContent = '苦手キー：' + getWeakKey();
     number.textContent = '入力文字数：' + num;
     accuracyRate.textContent = '正確率：' + getAccuracyRate() + '％';

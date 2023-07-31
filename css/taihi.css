@@ -7,30 +7,31 @@ body {
 }
 
 #hiraSubject {
-    position: fixed;
     top: 80px;
+    text-align: center;
 }
 
 #subjectRoma {
-    position: fixed;
     top: 120px;
+    text-align: center;
 }
 
 #input {
-    position: fixed;
     top: 140px;
+    text-align: center;
     color: red;
 }
 
 #timerArea {
-    position: fixed;
     top: 180px;
+    text-align: right;
 }
 
 #keyboard_1 {
     position: fixed;
     top: 245px;
     left: 50%;
+    padding-left: 40px;
     transform: translate(-50%, -50%);
     width: 600px;
     margin: 0 auto;
@@ -53,7 +54,7 @@ body {
     position: fixed;
     top: 290px;
     left: 50%;
-    padding-left: 35px;
+    padding-left: 75px;
     transform: translate(-50%, -50%);
     width: 600px;
     margin: 0 auto;
@@ -76,7 +77,7 @@ body {
     position: fixed;
     top: 335px;
     left: 50%;
-    padding-left: 70px;
+    padding-left: 110px;
     transform: translate(-50%, -50%);
     width: 600px;
     margin: 0 auto;
@@ -99,7 +100,7 @@ body {
     position: fixed;
     top: 380px;
     left: 50%;
-    padding-left: 105px;
+    padding-left: 0;
     transform: translate(-50%, -50%);
     width: 600px;
     margin: 0 auto;
@@ -107,9 +108,20 @@ body {
     flex-direction: row;
 }
 
-#keyboard_4 div {
-    width: 40px;
+#keyboard_4 :not(#key_shift) {
     height: 40px;
+    width: 40px;
+    border: 1px solid blue;
+    border-radius: 3px;
+    font-size: 16px;
+    text-align: center;
+    line-height: 40px;
+    margin: 5px;
+}
+
+#key_shift {
+    height: 40px;
+    width: 80px;
     border: 1px solid blue;
     border-radius: 3px;
     font-size: 16px;
@@ -122,7 +134,7 @@ body {
     position: fixed;
     top: 425px;
     left: 50%;
-    padding-left: 350px;
+    padding-left: 390px;
     transform: translate(-50%, -50%);
     width: 600px;
     margin: 0 auto;
@@ -231,27 +243,31 @@ body {
     height: 90px;
 }
 
+#missCount {
+    text-align: center;
+}
+
 #weak {
-    position: fixed;
     top: 130px;
+    text-align: center;
 }
 
 #number {
-    position: fixed;
     top: 150px;
+    text-align: center;
 }
 
 #accuracyRate {
-    position: fixed;
     top: 170px;
+    text-align: center;
 }
 
 #wpm {
-    position: fixed;
     top: 190px;
+    text-align: center;
 }
 
 #level {
-    position: fixed;
     top: 210px;
+    text-align: center;
 }
