@@ -87,6 +87,9 @@ const textList = [
     ['畠中さん', 'はたなかさん']
 ];
 
+let array = [];
+let k = 0;
+
 let romanArray = []; // 問題文一文字分を格納
 let text = ''; // 問題文を格納
 let hiraText = ''
@@ -97,7 +100,7 @@ let count = 0; // 正解数
 let miss = 0; // ミスの回数
 let READYTIME = 4; // 開始までの秒数＋１
 const TIME = 20; // 制限時間
-let time = TIME;
+let time = 0;
 let state = true; // キー入力有効
 let readyFlag = true; // 開始したかどうかの判定
 let weakKeys = new Object();
@@ -107,43 +110,51 @@ let num = 0; // 文字数
 function ready() {
     clearInterval(readyCountdown);
 
-    init();
-
-    // カウントダウン
+    for (let i=0; i<textList.length; i++) {
+        array[i] = i;
+    }
+    let a = array.length;
+    while(a) {
+        let j = Math.floor(Math.random()*a);
+        let t = array[--a];
+        array[a] = array[j];
+        array[j] = t;
+    }
+    
     countdown = setInterval(function() {
-        timer.textContent = '制限時間：' + --time + '秒';
-        if(time <= 0) {
-            state = false;
-            setTimeout(function(){ finish()}, 500);
-        }
+        timer.textContent = '経過時間：' + ++time + '秒';
     }, 1000);
+
+    init();
 }
 
 // 問題の更新
 function init() {
-    const rnd = Math.floor(Math.random() * textList.length);
+    hiraSubject.textContent = textList[array[k]][0]; // 問題文を設定
+    subject.textContent = textList[array[k]][1];
+    k++;
+    if (k == textList.length) {
+        finish();
+    } else {
+        // 問題文のローマ字表示
+        text = subject.textContent; // 問題文を格納
+        text = kataToHira(text); // カタカナをひらがなに変換
+        subjectRoma.textContent = '';
+        // 全てのローマ字を表示
+        for (let i=0; i=text.length; i++) {
+            determine();
+            subjectRoma.textContent += romanArray[0];
+        }
 
-    hiraSubject.textContent = textList[rnd][0]; // 問題文を設定
-    subject.textContent = textList[rnd][1];
+        // 最初の文字のローマ字をセット
+        text = subject.textContent; // 問題文を格納
+        text = kataToHira(text);
+        setChar();
 
-    // 問題文のローマ字表示
-    text = subject.textContent; // 問題文を格納
-    text = kataToHira(text); // カタカナをひらがなに変換
-    subjectRoma.textContent = '';
-    // 全てのローマ字を表示
-    for (let i=0; i=text.length; i++) {
-        determine();
-        subjectRoma.textContent += romanArray[0];
+        input.textContent = ''; // 入力欄をクリア
+
+        state = true; // 入力を可能にする
     }
-
-    // 最初の文字のローマ字をセット
-    text = subject.textContent; // 問題文を格納
-    text = kataToHira(text);
-    setChar();
-
-    input.textContent = ''; // 入力欄をクリア
-
-    state = true; // 入力を可能にする
 }
 
 // キーが押されたとき
@@ -382,7 +393,7 @@ function getAccuracyRate() {
 }
 
 function getWpm() {
-    let ans = count / TIME * 60;
+    let ans = Math.round(count / time * 60 * 10) / 10;
     return ans;
 }
 
@@ -431,7 +442,7 @@ function finish() {
     timer.textContent = '';
     keyboard.remove();
     finger.remove();
-    subject.textContent = '正解数は' + count + '個でした！';
+    subject.textContent = '今回のタイピング結果';
     missCount.textContent = 'ミス：' + miss + '回';
     weak.textContent = '苦手キー：' + getWeakKey();
     number.textContent = '入力文字数：' + num;
