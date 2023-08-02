@@ -8,14 +8,21 @@
 </head>
 
 <body>
-<h1 id="subject">スペースキーを押して下さい</h1>
-<div id="hiraSubject"><p></p></div>
-<div id="subjectRoma"><p></p></div>
-<div><p id="input"></p></div>
-<div id="timerArea">
-  <p id="timer"></p>
+<div id="subjectArea"></div>
+  <h1 id="subject">スペースキーを押して下さい</h1>
+  <div id="hiraSubject"><p></p></div>
+  <div id="subjectRoma"><p></p></div>
+  <div><p id="input"></p></div>
+  <div id="timerArea">
+    <p id="timer"></p>
+  </div>
+  <div id="missCount"><p></p></div>
+  <div id="weak"><p></p></div>
+  <div id="number"><p></p></div>
+  <div id="accuracyRate"><p></p></div>
+  <div id="wpm"><p></p></div>
+  <div id="level"><p></p></div>
 </div>
-<div><p id="missCount"></p></div>
 <div id="keyboard">
   <div id="keyboard_1">
     <div id="key_1">1</div>
@@ -90,13 +97,9 @@
     <div id="right_fourth"></div>
   </div>
 </div>
-<div id="weak"><p></p></div>
-<div id="number"><p></p></div>
-<div id="accuracyRate"><p></p></div>
-<div id="wpm"><p></p></div>
-<div id="level"><p></p></div>
+<input id="retry" type="button" onclick="retry()" value="リトライ">
 <div id="photo"></div>
-<img id="rogo" src="img/22_0601_ロボキャンfin-04.png"></div>
+<img id="rogo" src="img/22_0601_ロボキャンfin-04.png">
 <script src="js/question.js"></script>
 </body>
 </html>

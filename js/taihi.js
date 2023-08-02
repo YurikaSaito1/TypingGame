@@ -24,6 +24,7 @@ const accuracyRate = document.getElementById('accuracyRate');
 const wpm = document.getElementById('wpm');
 const level = document.getElementById('level');
 const photo = document.getElementById('photo');
+const retryButton = document.getElementById('retry');
 
 const romanMap = {
     'あ' : ['a'], 'い' : ['i'], 'う' : ['u'], 'え' : ['e'], 'お' : ['o'],
@@ -207,7 +208,7 @@ window.addEventListener('keypress', (event) => {
 
     // ミスした時
     if (!inputFlag && !readyFlag) {
-        body.style.backgroundColor = "red";
+        body.style.backgroundColor = "lightpink";
         window.setTimeout(function(){
             body.style.backgroundColor = "white";
         }, 100);
@@ -306,10 +307,10 @@ function determine() {
 function setFinger(roman) {
     let finger = checkFinger(roman);
     if (finger == 'thumb') {
-        left_thumb.style.backgroundColor = "lightblue";
-        right_thumb.style.backgroundColor = "lightblue";
+        left_thumb.style.backgroundColor = "#ffd280";
+        right_thumb.style.backgroundColor = "#ffd280";
     } else {
-        finger.style.backgroundColor = "lightblue";
+        finger.style.backgroundColor = "#ffd280";
     }
 }
 
@@ -360,10 +361,10 @@ function shiftMatch(key) {
 
 function keyboardColorChange() {
     var elem = keyMatch(romanArray[0].slice(0, 1));
-    elem.style.backgroundColor = "lightblue";
+    elem.style.backgroundColor = "#ffd280";
     var shiftFlag = shiftMatch(romanArray[0].slice(0, 1));
     if (shiftFlag) {
-        shift.style.backgroundColor = "lightblue";
+        shift.style.backgroundColor = "#ffd280";
     }
 }
 
@@ -400,36 +401,36 @@ function getWpm() {
 function getLevel() {
     let ans = '';
     switch (true) {
-        case count <= 2:
-            return 'E-';
-        case 2 < count && count <= 4:
-            return 'E';
-        case 4 < count && count <= 6:
-            return 'E+';
-        case 6 < count && count <= 8:
-            return 'D-';
-        case 8 < count && count <= 10:
-            return 'D';
-        case 10 < count && count <= 12:
-            return 'D+';
-        case 12 < count && count <= 14:
-            return 'C-';
-        case 14 < count && count <= 16:
-            return 'C';
-        case 16 < count && count <= 18:
-            return 'C+';
-        case 18 < count && count <= 20:
-            return 'B-';
-        case 20 < count && count <= 22:
-            return 'B';
-        case 22 < count && count <= 24:
-            return 'B+';
-        case 24 < count && count <= 26:
-            return 'A-';
-        case 26 < count && count <= 28:
-            return 'A';
-        case 28 < count && count <= 30:
+        case time <= 12:
             return 'A+';
+        case 12 < time && time <= 16:
+            return 'A';
+        case 16 < time && time <= 20:
+            return 'A-';
+        case 20 < time && time <= 24:
+            return 'B+';
+        case 24 < time && time <= 28:
+            return 'B';
+        case 28 < time && time <= 32:
+            return 'B-';
+        case 32 < time && time <= 36:
+            return 'C+';
+        case 36 < time && time <= 40:
+            return 'C';
+        case 40 < time && time <= 44:
+            return 'C-';
+        case 44 < time && time <= 48:
+            return 'D+';
+        case 48 < time && time <= 52:
+            return 'D';
+        case 52 < time && time <= 56:
+            return 'D-';
+        case 56 < time && time <= 60:
+            return 'E+';
+        case 60 < time && time <= 64:
+            return 'E';
+        case 64 < time:
+            return 'E-';
     }
 }
 
@@ -440,8 +441,8 @@ function finish() {
     hiraSubject.textContent = '';
     input.textContent = '';
     timer.textContent = '';
-    keyboard.remove();
-    finger.remove();
+    keyboard.style.display = "none";
+    finger.style.display = "none";
     subject.textContent = '今回のタイピング結果';
     missCount.textContent = 'ミス：' + miss + '回';
     weak.textContent = '苦手キー：' + getWeakKey();
@@ -452,4 +453,31 @@ function finish() {
 
     const rnd = Math.floor(Math.random() * 29);
     photo.innerHTML = '<img src="img/' + rnd + '.JPG">';
+
+    retryButton.style.display = "block";
+
+    readyFlag = true;
+}
+
+function retry() {
+    keyboard.style.display = "block";
+    finger.style.display = "block";
+    subject.textContent = '';
+    missCount.textContent = '';
+    weak.textContent = '';
+    number.textContent = '';
+    accuracyRate.textContent = '';
+    wpm.textContent = '';
+    level.textContent = '';
+    photo.innerHTML = '';
+    subject.textContent = 'スペースキーを押して下さい';
+    READYTIME = 4;
+    k = 0;
+    array = [];
+    count = 0;
+    miss = 0;
+    time = 0;
+    weakKeys = new Object();
+    num = 0;
+    retryButton.style.display = "none";
 }

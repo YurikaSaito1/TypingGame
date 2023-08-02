@@ -4,6 +4,7 @@ body {
 
 #subject {
     text-align: center;
+    background-color: orange;
 }
 
 #hiraSubject {
@@ -25,7 +26,7 @@ body {
 #timerArea {
     position: fixed;
     top: 180px;
-    right: 0;
+    right: 2%;
 }
 
 #keyboard_1 {
@@ -43,7 +44,7 @@ body {
 #keyboard_1 div {
     width: 40px;
     height: 40px;
-    border: 1px solid blue;
+    border: 1px solid orange;
     border-radius: 3px;
     font-size: 16px;
     text-align: center;
@@ -66,7 +67,7 @@ body {
 #keyboard_2 div {
     width: 40px;
     height: 40px;
-    border: 1px solid blue;
+    border: 1px solid orange;
     border-radius: 3px;
     font-size: 16px;
     text-align: center;
@@ -89,7 +90,7 @@ body {
 #keyboard_3 div {
     width: 40px;
     height: 40px;
-    border: 1px solid blue;
+    border: 1px solid orange;
     border-radius: 3px;
     font-size: 16px;
     text-align: center;
@@ -112,7 +113,7 @@ body {
 #keyboard_4 :not(#key_shift) {
     height: 40px;
     width: 40px;
-    border: 1px solid blue;
+    border: 1px solid orange;
     border-radius: 3px;
     font-size: 16px;
     text-align: center;
@@ -123,7 +124,7 @@ body {
 #key_shift {
     height: 40px;
     width: 80px;
-    border: 1px solid blue;
+    border: 1px solid orange;
     border-radius: 3px;
     font-size: 16px;
     text-align: center;
@@ -146,7 +147,7 @@ body {
 #keyboard_space div {
     width: 190px;
     height: 40px;
-    border: 1px solid blue;
+    border: 1px solid orange;
     border-radius: 3px;
     font-size: 16px;
     text-align: center;
@@ -176,7 +177,7 @@ body {
     position: relative;
     width: 40px;
     border-radius: 25px 25px 0 0;
-    border: 1px solid blue;
+    border: 1px solid orange;
     border-bottom: none;
     margin: 5px;
 }
@@ -217,7 +218,7 @@ body {
     position: relative;
     width: 40px;
     border-radius: 25px 25px 0 0;
-    border: 1px solid blue;
+    border: 1px solid orange;
     border-bottom: none;
     margin: 5px;
 }
@@ -274,6 +275,32 @@ body {
     text-align: center;
 }
 
-#photo {
+#retry {
+    position: fixed;
+    top: 250px;
     text-align: center;
+    display: none;
+    background-color: #ffd280;
+    border: orange;
+    height: 30px;
+    width: 80px;
+    border-radius: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0 auto;
+}
+
+#photo {
+    position: fixed;
+    top: 430px;
+    text-align: center;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0 auto;
+}
+
+#rogo {
+    position: absolute;
+    right: 2%;
+    bottom: 5%;
 }
