@@ -439,6 +439,6 @@ function finish() {
     wpm.textContent = 'WPM：' + getWpm();
     level.textContent = 'レベル：' + getLevel();
 
-    const rnd = Math.floor(Math.random() * 3);
-    photo.innerHTML = '<img src="img/' + '0' + '.JPG">';
+    const rnd = Math.floor(Math.random() * 29);
+    photo.innerHTML = '<img src="img/' + rnd + '.JPG">';
 }

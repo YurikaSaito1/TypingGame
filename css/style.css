@@ -23,8 +23,9 @@ body {
 }
 
 #timerArea {
+    position: fixed;
     top: 180px;
-    text-align: right;
+    right: 0;
 }
 
 #keyboard_1 {
@@ -269,5 +270,9 @@ body {
 
 #level {
     top: 210px;
+    text-align: center;
+}
+
+#photo {
     text-align: center;
 }
