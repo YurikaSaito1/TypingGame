@@ -15,6 +15,7 @@ body {
 #subjectRoma {
     top: 120px;
     text-align: center;
+    color: gray;
 }
 
 #input {
@@ -245,33 +246,38 @@ body {
     height: 90px;
 }
 
-#missCount {
+#second {
     top: 110px;
     text-align: center;
 }
 
-#weak {
+#missCount {
     top: 130px;
     text-align: center;
 }
 
-#number {
+#weak {
     top: 150px;
     text-align: center;
 }
 
-#accuracyRate {
+#number {
     top: 170px;
     text-align: center;
 }
 
-#wpm {
+#accuracyRate {
     top: 190px;
     text-align: center;
 }
 
-#level {
+#wpm {
     top: 210px;
+    text-align: center;
+}
+
+#level {
+    top: 230px;
     text-align: center;
 }
 
@@ -297,6 +303,14 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     margin: 0 auto;
+}
+
+#levelTableArea {
+    position: fixed;
+    top: 90px;
+    right: 10%;
+    text-align: center;
+    display: none;
 }
 
 #rogo {

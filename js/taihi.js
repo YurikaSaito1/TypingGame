@@ -18,13 +18,15 @@ const right_first = document.getElementById('right_first');
 const right_second = document.getElementById('right_second');
 const right_third = document.getElementById('right_third');
 const right_fourth = document.getElementById('right_fourth');
+const second = document.getElementById('second');
 const weak = document.getElementById('weak');
 const number = document.getElementById('number');
 const accuracyRate = document.getElementById('accuracyRate');
 const wpm = document.getElementById('wpm');
-const level = document.getElementById('level');
+//const level = document.getElementById('level');
 const photo = document.getElementById('photo');
 const retryButton = document.getElementById('retry');
+const levelTableArea = document.getElementById('levelTableArea');
 
 const romanMap = {
     'あ' : ['a'], 'い' : ['i'], 'う' : ['u'], 'え' : ['e'], 'お' : ['o'],
@@ -398,7 +400,7 @@ function getWpm() {
     return ans;
 }
 
-function getLevel() {
+/*function getLevel() {
     let ans = '';
     switch (true) {
         case time <= 12:
@@ -432,6 +434,23 @@ function getLevel() {
         case 64 < time:
             return 'E-';
     }
+}*/
+
+function getLevel() {
+    switch(true) {
+        case time <= 20:
+            return 'A';
+        case 20 < time && time <= 30:
+            return 'B';
+        case 30 < time && time <= 40:
+            return 'C';
+        case 40 < time && time <= 50:
+            return 'D';
+        case 50 < time && time <= 60:
+            return 'E';
+        case 60 < time:
+            return 'F';
+    }
 }
 
 // 終了処理
@@ -444,17 +463,22 @@ function finish() {
     keyboard.style.display = "none";
     finger.style.display = "none";
     subject.textContent = '今回のタイピング結果';
+    second.textContent = 'クリア秒数：' + time + '秒';
     missCount.textContent = 'ミス：' + miss + '回';
     weak.textContent = '苦手キー：' + getWeakKey();
     number.textContent = '入力文字数：' + num;
     accuracyRate.textContent = '正確率：' + getAccuracyRate() + '％';
     wpm.textContent = 'WPM：' + getWpm();
-    level.textContent = 'レベル：' + getLevel();
+    //level.textContent = 'レベル：' + getLevel();
 
     const rnd = Math.floor(Math.random() * 29);
     photo.innerHTML = '<img src="img/' + rnd + '.JPG">';
 
     retryButton.style.display = "block";
+
+    levelTableArea.style.display = "block";
+    let levelTable = document.getElementById('level_' + getLevel());
+    levelTable.style.backgroundColor = 'orange';
 
     readyFlag = true;
 }
@@ -480,4 +504,5 @@ function retry() {
     weakKeys = new Object();
     num = 0;
     retryButton.style.display = "none";
+    levelTableArea.style.display = "none";
 }
