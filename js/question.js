@@ -218,9 +218,9 @@ window.addEventListener('keypress', (event) => {
         miss++;
 
         if (key in weakKeys) {
-            weakKeys[key] += 1;
+            weakKeys[romanArray[0].slice(0, 1)] += 1;
         } else {
-            weakKeys[key] = 1;
+            weakKeys[romanArray[0].slice(0, 1)] = 1;
         }
 
         keyboardColorChange();
@@ -487,6 +487,7 @@ function retry() {
     keyboard.style.display = "block";
     finger.style.display = "block";
     subject.textContent = '';
+    second.textContent = '';
     missCount.textContent = '';
     weak.textContent = '';
     number.textContent = '';
