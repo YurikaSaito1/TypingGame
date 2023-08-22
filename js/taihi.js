@@ -522,7 +522,7 @@ function finish() {
     wpm.textContent = 'WPM：' + getWpm();
     //level.textContent = 'レベル：' + getLevel();
 
-    const rnd = Math.floor(Math.random() * 29);
+    const rnd = Math.floor(Math.random() * 36);
     photo.innerHTML = '<img src="img/' + rnd + '.JPG">';
 
     retryButton.style.display = "block";
