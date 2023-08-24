@@ -47,15 +47,26 @@
 #keyboard_2 {
     position: absolute;
     top: 48vh;
-    left: 22vw;
+    left: 14.5vw;
     margin: 0 auto;
     display: flex;
     flex-direction: row;
 }
 
-#keyboard_2 div {
+#keyboard_2 :not(#key_tab) {
     width: 7vh;
     height: 7vh;
+    border: 0.2vh solid orange;
+    border-radius: 1vh;
+    font-size: 3.5vh;
+    text-align: center;
+    line-height: 8vh;
+    margin: 1vh;
+}
+
+#key_tab {
+    height: 7vh;
+    width: 10vh;
     border: 0.2vh solid orange;
     border-radius: 1vh;
     font-size: 3.5vh;
@@ -118,7 +129,7 @@
 #keyboard_5 {
     position: absolute;
     top: 72vh;
-    left: 18vw;
+    left: 23vw;
     margin: 0 auto;
     display: flex;
     flex-direction: row;

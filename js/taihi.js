@@ -8,6 +8,7 @@ const missCount = document.getElementById('missCount'); // ミスの回数
 const keyboard = document.getElementById('keyboard');
 const shift = document.getElementById('key_shift');
 const ctrl = document.getElementById('key_ctrl');
+const alt = document.getElementById('key_alt');
 const finger = document.getElementById('finger');
 const left_fourth = document.getElementById('left_fourth');
 const left_third = document.getElementById('left_third');
@@ -79,6 +80,7 @@ const textList = [
     ['コントロールゼット', 'Ctrl + z'],
     ['コントロールシー', 'Ctrl + c'],
     ['コントロールブイ', 'Ctrl + v'],
+    //['オルトティー', 'Alt + t'],
     ['ヴォイド', 'void'],
     ['セットアップ', 'setup'],
     ['ループ', 'loop'],
@@ -112,6 +114,7 @@ let state = true; // キー入力有効
 let readyFlag = true; // 開始したかどうかの判定
 let shiftFlag = false;
 let ctrlFlag = false; // ctrlが必要かどうか
+let altFlag = false;
 let weakKeys = new Object();
 let num = 0; // 文字数
 
@@ -153,6 +156,8 @@ function init() {
             determine();
             if (ctrlFlag) {
                 subjectRoma.textContent += 'Ctrl + ';
+            } else if (altFlag) {
+                subjectRoma.textContent += 'Alt + ';
             }
             subjectRoma.textContent += romanArray[0];
         }
@@ -172,7 +177,6 @@ function init() {
 // キーが押されたとき
 window.addEventListener('keydown', (event) => {
     let key = event.key;
-    console.log(key);
 
     if(!state) return;  // ゲーム終了後は操作できなくする
 
@@ -188,7 +192,7 @@ window.addEventListener('keydown', (event) => {
     if (event.ctrlKey && ctrlFlag) {
         if (event.code == "Key" + romanArray[0].slice(0, 1).toUpperCase()) {
             if (!inputFlag) {
-                input.textContent += romanArray[0].slice(0, 1); // ディスプレイに表示
+                input.textContent += "Ctrl + " + romanArray[0].slice(0, 1); // ディスプレイに表示
                 inputFlag = true;
                 num++;
             }
@@ -199,6 +203,7 @@ window.addEventListener('keydown', (event) => {
             elem.style.backgroundColor = "white";
             shift.style.backgroundColor = "white";
             ctrl.style.backgroundColor = "white";
+            alt.style.backgroundColor = "white";
             clearFinger(romanArray[0].slice(0, 1));
 
             // 一文字削る
@@ -210,6 +215,33 @@ window.addEventListener('keydown', (event) => {
                 nextFlag = 1;
             }
             ctrlFlag = false;
+        }
+    } else if (event.altKey && altFlag) {
+        if (event.code == "Key" + romanArray[0].slice(0, 1).toUpperCase()) {
+            if (!inputFlag) {
+                input.textContent += "Alt + "; // ディスプレイに表示
+                inputFlag = true;
+                num++;
+            }
+
+            charFlag[0] = true;
+
+            var elem = keyMatch(romanArray[0].slice(0, 1));
+            elem.style.backgroundColor = "white";
+            shift.style.backgroundColor = "white";
+            ctrl.style.backgroundColor = "white";
+            alt.style.backgroundColor = "white";
+            clearFinger(romanArray[0].slice(0, 1));
+
+            // 一文字削る
+            romanArray[0] = romanArray[0].slice(1);
+            
+            // かな一文字分入力し終わった時
+            if (romanArray[0].length == 0) {
+                setChar();
+                nextFlag = 1;
+            }
+            altFlag = false;
         }
     } else {
         for (let i=0; i<romanArray.length; i++) {
@@ -227,6 +259,7 @@ window.addEventListener('keydown', (event) => {
                 elem.style.backgroundColor = "white";
                 shift.style.backgroundColor = "white";
                 ctrl.style.backgroundColor = "white";
+                alt.style.backgroundColor = "white";
                 clearFinger(romanArray[0].slice(0, 1));
 
                 // 一文字削る
@@ -243,7 +276,7 @@ window.addEventListener('keydown', (event) => {
     }
 
     // ミスした時
-    if (!inputFlag && !readyFlag && key != 'Control' && key != 'Shift') {
+    if (!inputFlag && !readyFlag && key != 'Control' && key != 'Shift' && key != 'Alt') {
         body.style.backgroundColor = "lightpink";
         window.setTimeout(function(){
             body.style.backgroundColor = "white";
@@ -337,6 +370,10 @@ function determine() {
         ctrlFlag = true;
         romanArray[0] = text.slice(7, 8);
         text = text.slice(8);
+    } else if (text.slice(0, 3).match(/Alt/)) {
+        altFlag = true;
+        romanArray[0] = text.slice(6, 7);
+        text = text.slice(7);
     } else {
         romanArray[0] = text.slice(0, 1);
         text = text.slice(1);
@@ -408,6 +445,8 @@ function keyboardColorChange() {
         shift.style.backgroundColor = "#ffd280";
     } else if (ctrlFlag) {
         ctrl.style.backgroundColor = "#ffd280";
+    } else if (altFlag) {
+        alt.style.backgroundColor = "#ffd280";
     }
 }
 
