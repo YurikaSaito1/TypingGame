@@ -76,7 +76,9 @@ const rightFourth = ['0', '-', 'p', '[', ';', ':', ']', '{', '}'];
 const shiftArray = ['(', ')', '{', '}']
 
 const textList = [
-    //['コントロールゼット', 'Ctrl + z'],
+    ['コントロールゼット', 'Ctrl + z'],
+    ['コントロールシー', 'Ctrl + c'],
+    ['コントロールブイ', 'Ctrl + v'],
     ['ヴォイド', 'void'],
     ['セットアップ', 'setup'],
     ['ループ', 'loop'],
@@ -108,6 +110,7 @@ const TIME = 20; // 制限時間
 let time = 0;
 let state = true; // キー入力有効
 let readyFlag = true; // 開始したかどうかの判定
+let shiftFlag = false;
 let ctrlFlag = false; // ctrlが必要かどうか
 let weakKeys = new Object();
 let num = 0; // 文字数
@@ -136,12 +139,11 @@ function ready() {
 
 // 問題の更新
 function init() {
-    hiraSubject.textContent = textList[array[k]][0]; // 問題文を設定
-    subject.textContent = textList[array[k]][1];
-    k++;
     if (k == textList.length) {
         finish();
     } else {
+        hiraSubject.textContent = textList[array[k]][0]; // 問題文を設定
+        subject.textContent = textList[array[k]][1];
         // 問題文のローマ字表示
         text = subject.textContent; // 問題文を格納
         text = kataToHira(text); // カタカナをひらがなに変換
@@ -151,9 +153,8 @@ function init() {
             determine();
             if (ctrlFlag) {
                 subjectRoma.textContent += 'Ctrl + ';
-            } else {
-                subjectRoma.textContent += romanArray[0];
             }
+            subjectRoma.textContent += romanArray[0];
         }
 
         // 最初の文字のローマ字をセット
@@ -165,24 +166,15 @@ function init() {
 
         state = true; // 入力を可能にする
     }
+    k++;
 }
 
 // キーが押されたとき
-window.addEventListener('keypress', (event) => {
+window.addEventListener('keydown', (event) => {
     let key = event.key;
+    console.log(key);
 
     if(!state) return;  // ゲーム終了後は操作できなくする
-
-    // キーボードのハイライトをクリア
-    if (!readyFlag && state) {
-        var elem = keyMatch(romanArray[0].slice(0, 1));
-        
-        elem.style.backgroundColor = "white";
-        shift.style.backgroundColor = "white";
-        ctrl.style.backgroundColor = "white";
-
-        clearFinger(romanArray[0].slice(0, 1));
-    }
 
     let charFlag = []; // 入力された文字と同じかどうかの判定
     let inputFlag = false; // 表示したかどうかの判定
@@ -194,7 +186,7 @@ window.addEventListener('keypress', (event) => {
     }
 
     if (event.ctrlKey && ctrlFlag) {
-        if (event.code == "KeyZ") {
+        if (event.code == "Key" + romanArray[0].slice(0, 1).toUpperCase()) {
             if (!inputFlag) {
                 input.textContent += romanArray[0].slice(0, 1); // ディスプレイに表示
                 inputFlag = true;
@@ -202,6 +194,12 @@ window.addEventListener('keypress', (event) => {
             }
 
             charFlag[0] = true;
+
+            var elem = keyMatch(romanArray[0].slice(0, 1));
+            elem.style.backgroundColor = "white";
+            shift.style.backgroundColor = "white";
+            ctrl.style.backgroundColor = "white";
+            clearFinger(romanArray[0].slice(0, 1));
 
             // 一文字削る
             romanArray[0] = romanArray[0].slice(1);
@@ -212,24 +210,6 @@ window.addEventListener('keypress', (event) => {
                 nextFlag = 1;
             }
             ctrlFlag = false;
-        } else if (event.code == "KeyX") {
-            console.log("ok");
-            body.style.backgroundColor = "lightpink";
-            window.setTimeout(function(){
-                body.style.backgroundColor = "white";
-            }, 100);
-    
-            miss++;
-    
-            if (key in weakKeys) {
-                weakKeys[romanArray[0].slice(0, 1)] += 1;
-            } else {
-                weakKeys[romanArray[0].slice(0, 1)] = 1;
-            }
-    
-            keyboardColorChange();
-    
-            setFinger(romanArray[0].slice(0, 1));
         }
     } else {
         for (let i=0; i<romanArray.length; i++) {
@@ -243,9 +223,15 @@ window.addEventListener('keypress', (event) => {
 
                 charFlag[i] = true;
 
+                var elem = keyMatch(romanArray[0].slice(0, 1));
+                elem.style.backgroundColor = "white";
+                shift.style.backgroundColor = "white";
+                ctrl.style.backgroundColor = "white";
+                clearFinger(romanArray[0].slice(0, 1));
+
                 // 一文字削る
                 romanArray[i] = romanArray[i].slice(1);
-                
+
                 // かな一文字分入力し終わった時
                 if (romanArray[i].length == 0) {
                     setChar();
@@ -257,7 +243,7 @@ window.addEventListener('keypress', (event) => {
     }
 
     // ミスした時
-    if (!inputFlag && !readyFlag) {
+    if (!inputFlag && !readyFlag && key != 'Control' && key != 'Shift') {
         body.style.backgroundColor = "lightpink";
         window.setTimeout(function(){
             body.style.backgroundColor = "white";
@@ -299,7 +285,7 @@ window.addEventListener('keypress', (event) => {
             }
         }, 1000);
     }
-})
+}, {passive: false});
 
 // 判定するかな一文字の設定
 function setChar() {
@@ -406,8 +392,10 @@ function keyMatch(key) {
 
 function shiftMatch(key) {
     if (shiftArray.includes(key) || key.match(/^[A-Z]+$/)) {
+        shiftFlag = true;
         return true;
     } else {
+        shiftFlag = false;
         return false;
     }
 }
@@ -418,6 +406,8 @@ function keyboardColorChange() {
     var shiftFlag = shiftMatch(romanArray[0].slice(0, 1));
     if (shiftFlag) {
         shift.style.backgroundColor = "#ffd280";
+    } else if (ctrlFlag) {
+        ctrl.style.backgroundColor = "#ffd280";
     }
 }
 
