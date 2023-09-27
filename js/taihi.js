@@ -81,7 +81,7 @@ const textList = [
     //['コントロールシー', 'Ctrl + c'],
     //['コントロールブイ', 'Ctrl + v'],
     //['オルトティー', 'Alt + t'],
-    ['ヴォイド', 'void'],
+    /*['ヴォイド', 'void'],
     ['セットアップ', 'setup'],
     ['ループ', 'loop'],
     ['デジタルライト', 'digitalWrite'],
@@ -93,7 +93,28 @@ const textList = [
     ['中カッコ', '{}'],
     ['角カッコ', '[]'],
     ['二井見先生', 'にいみせんせい'],
-    ['畠中さん', 'はたなかさん']
+    ['畠中さん', 'はたなかさん']*/
+    ['アーク', 'arc'],
+    ['ライン', 'line'],
+    ['ブレーク', 'break'],
+    ['ランダム', 'random'],
+    ['イント', 'int'],
+    ['フレームレート', 'frameRate'],
+    ['フォー', 'for'],
+    ['ストローク', 'stroke'],
+    ['ストロークウェイト', 'strokeWeight'],
+    ['レクトモード', 'rectMode'],
+    ['センター', 'CENTER'],
+    ['マウスプレッスド', 'mousePressed'],
+    ['プリントエルエヌ', 'println'],
+    ['フレームカウント', 'frameCount'],
+    ['イフ', 'if'],
+    ['小カッコ', '()'],
+    ['中カッコ', '{}'],
+    ['コロン', ':'],
+    ['セミコロン', ';'],
+    ['ピリオド', '.'],
+    ['カンマ', ',']
 ];
 
 let array = [];
@@ -553,7 +574,7 @@ function finish() {
     //level.textContent = 'レベル：' + getLevel();
 
     const rnd = Math.floor(Math.random() * 39);
-    photo.src = "img/" + rnd + ".JPG";
+    photo.src = "img/" + rnd + ".jpg";
 
     retryButton.style.display = "block";
 
