@@ -77,9 +77,9 @@ const rightFourth = ['0', '-', 'p', '[', ';', ':', ']', '{', '}'];
 const shiftArray = ['(', ')', '{', '}']
 
 const textList = [
-    ['コントロールゼット', 'Ctrl + z'],
-    ['コントロールシー', 'Ctrl + c'],
-    ['コントロールブイ', 'Ctrl + v'],
+    //['コントロールゼット', 'Ctrl + z'],
+    //['コントロールシー', 'Ctrl + c'],
+    //['コントロールブイ', 'Ctrl + v'],
     //['オルトティー', 'Alt + t'],
     ['ヴォイド', 'void'],
     ['セットアップ', 'setup'],
@@ -117,6 +117,7 @@ let ctrlFlag = false; // ctrlが必要かどうか
 let altFlag = false;
 let weakKeys = new Object();
 let num = 0; // 文字数
+let levelTable;
 
 // 開始処理
 function ready() {
@@ -551,13 +552,13 @@ function finish() {
     wpm.textContent = 'WPM：' + getWpm();
     //level.textContent = 'レベル：' + getLevel();
 
-    const rnd = Math.floor(Math.random() * 36);
-    photo.innerHTML = '<img src="img/' + rnd + '.JPG">';
+    const rnd = Math.floor(Math.random() * 39);
+    photo.src = "img/" + rnd + ".JPG";
 
     retryButton.style.display = "block";
 
     levelTableArea.style.display = "block";
-    let levelTable = document.getElementById('level_' + getLevel());
+    levelTable = document.getElementById('level_' + getLevel());
     levelTable.style.backgroundColor = 'orange';
     state = false;
 }
@@ -573,7 +574,7 @@ function retry() {
     accuracyRate.textContent = '';
     wpm.textContent = '';
     level.textContent = '';
-    photo.innerHTML = '';
+    photo.src = '';
     subject.textContent = 'スペースキーを押して下さい';
     READYTIME = 4;
     k = 0;
@@ -584,6 +585,7 @@ function retry() {
     weakKeys = new Object();
     num = 0;
     retryButton.style.display = "none";
+    levelTable.style.backgroundColor = 'white';
     levelTableArea.style.display = "none";
     readyFlag = true;
     state = true;
