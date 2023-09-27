@@ -106,7 +106,7 @@ const textList = [
     ['レクトモード', 'rectMode'],
     ['センター', 'CENTER'],
     ['マウスプレッスド', 'mousePressed'],
-    ['プリントエルエヌ', 'println'],
+    ['プリントライン', 'println'],
     ['フレームカウント', 'frameCount'],
     ['イフ', 'if'],
     ['小カッコ', '()'],
