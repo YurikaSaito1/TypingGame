@@ -573,7 +573,7 @@ function finish() {
     wpm.textContent = 'WPM：' + getWpm();
     //level.textContent = 'レベル：' + getLevel();
 
-    const rnd = Math.floor(Math.random() * 39);
+    const rnd = Math.floor(Math.random() * 11);
     photo.src = "img/" + rnd + ".jpg";
 
     retryButton.style.display = "block";
