@@ -117,6 +117,8 @@ const textList = [
     ['カンマ', ',']
 ];
 
+const numberOfPhotos = 11;
+
 let array = [];
 let k = 0;
 
@@ -139,6 +141,7 @@ let altFlag = false;
 let weakKeys = new Object();
 let num = 0; // 文字数
 let levelTable;
+let usedPhoto = new Array(numberOfPhotos).fill(false); // 表示済みの画像番号
 
 // 開始処理
 function ready() {
@@ -502,42 +505,6 @@ function getWpm() {
     return ans;
 }
 
-/*function getLevel() {
-    let ans = '';
-    switch (true) {
-        case time <= 12:
-            return 'A+';
-        case 12 < time && time <= 16:
-            return 'A';
-        case 16 < time && time <= 20:
-            return 'A-';
-        case 20 < time && time <= 24:
-            return 'B+';
-        case 24 < time && time <= 28:
-            return 'B';
-        case 28 < time && time <= 32:
-            return 'B-';
-        case 32 < time && time <= 36:
-            return 'C+';
-        case 36 < time && time <= 40:
-            return 'C';
-        case 40 < time && time <= 44:
-            return 'C-';
-        case 44 < time && time <= 48:
-            return 'D+';
-        case 48 < time && time <= 52:
-            return 'D';
-        case 52 < time && time <= 56:
-            return 'D-';
-        case 56 < time && time <= 60:
-            return 'E+';
-        case 60 < time && time <= 64:
-            return 'E';
-        case 64 < time:
-            return 'E-';
-    }
-}*/
-
 function getLevel() {
     switch(true) {
         case time <= 20:
@@ -573,8 +540,16 @@ function finish() {
     wpm.textContent = 'WPM：' + getWpm();
     //level.textContent = 'レベル：' + getLevel();
 
-    const rnd = Math.floor(Math.random() * 11);
+    if (usedPhoto.every((i) => true)) {
+        usedPhoto.fill(false);
+    }
+    let rnd;
+    while (true) {
+        rnd = Math.floor(Math.random() * numberOfPhotos);
+        if (!usedPhoto[rnd]) break;
+    }
     photo.src = "img/" + rnd + ".jpg";
+    usedPhoto[rnd] = true;
 
     retryButton.style.display = "block";
 
