@@ -141,7 +141,9 @@ let ctrlFlag = false; // ctrlが必要かどうか
 let altFlag = false;
 let weakKeys = new Object();
 let num = 0; // 文字数
-let levelTable;
+let lastLevelTable; // 前回のレベルの矢印
+let levelTable; // 今回のレベル表
+let lastLevel; // 最近のレベル
 let rnd = 0; // ランダムな画像番号
 let url = ''; // 画像のURL
 let usedPhoto = new Array(numberOfPhotos).fill(false); // 表示済みの画像番号
@@ -541,8 +543,8 @@ function finish() {
     number.textContent = '入力文字数：' + num;
     accuracyRate.textContent = '正確率：' + getAccuracyRate() + '％';
     wpm.textContent = 'WPM：' + getWpm();
-    //level.textContent = 'レベル：' + getLevel();
 
+    // 写真表示
     if (usedPhoto.every((i) => true)) {
         usedPhoto.fill(false);
     }
@@ -557,12 +559,22 @@ function finish() {
 
     retryButton.style.display = "block";
 
+    // レベル表示
     levelTableArea.style.display = "block";
-    levelTable = document.getElementById('level_' + getLevel());
+    if (lastLevel != undefined) {
+        document.getElementById("last").innerHTML = "前回";
+        lastLevelTable = document.getElementById('last_' + lastLevel);
+        lastLevelTable.innerHTML = "→";
+    }
+    lastLevel = getLevel();
+    levelTable = document.getElementById('level_' + lastLevel);
     levelTable.style.backgroundColor = 'orange';
+    
+    // 入力を受け付けない
     state = false;
 }
 
+// リトライ
 function retry() {
     keyboard.style.display = "block";
     finger.style.display = "block";
@@ -586,6 +598,9 @@ function retry() {
     weakKeys = new Object();
     num = 0;
     retryButton.style.display = "none";
+    if (lastLevelTable != undefined) {
+        lastLevelTable.innerHTML = "";
+    }
     levelTable.style.backgroundColor = 'white';
     levelTableArea.style.display = "none";
     readyFlag = true;
