@@ -562,7 +562,6 @@ function finish() {
     // レベル表示
     levelTableArea.style.display = "block";
     if (lastLevel != undefined) {
-        document.getElementById("last").innerHTML = "前回";
         lastLevelTable = document.getElementById('last_' + lastLevel);
         lastLevelTable.innerHTML = "→";
     }
