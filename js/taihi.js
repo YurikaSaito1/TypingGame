@@ -28,6 +28,7 @@ const wpm = document.getElementById('wpm');
 //const level = document.getElementById('level');
 const photo = document.getElementById('photo');
 const retryButton = document.getElementById('retry');
+const download = document.getElementById('download');
 const levelTableArea = document.getElementById('levelTableArea');
 
 const romanMap = {
@@ -141,6 +142,8 @@ let altFlag = false;
 let weakKeys = new Object();
 let num = 0; // 文字数
 let levelTable;
+let rnd = 0; // ランダムな画像番号
+let url = ''; // 画像のURL
 let usedPhoto = new Array(numberOfPhotos).fill(false); // 表示済みの画像番号
 
 // 開始処理
@@ -543,13 +546,14 @@ function finish() {
     if (usedPhoto.every((i) => true)) {
         usedPhoto.fill(false);
     }
-    let rnd;
     while (true) {
         rnd = Math.floor(Math.random() * numberOfPhotos);
         if (!usedPhoto[rnd]) break;
     }
-    photo.src = "img/" + rnd + ".jpg";
+    url = "img/" + rnd + ".jpg"
+    photo.src = url;
     usedPhoto[rnd] = true;
+    download.innerHTML = "<a href=" + url + " download>画像をダウンロード</a>";
 
     retryButton.style.display = "block";
 
@@ -571,6 +575,7 @@ function retry() {
     wpm.textContent = '';
     level.textContent = '';
     photo.src = '';
+    download.innerHTML = "";
     subject.textContent = 'スペースキーを押して下さい';
     READYTIME = 4;
     k = 0;
