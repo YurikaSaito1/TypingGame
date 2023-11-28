@@ -25,7 +25,7 @@ const weak = document.getElementById('weak');
 const number = document.getElementById('number');
 const accuracyRate = document.getElementById('accuracyRate');
 const wpm = document.getElementById('wpm');
-//const level = document.getElementById('level');
+const photoArea_S = document.getElementById('photoArea_S'); // 写真表示エリア(Sランク)
 const photo = document.getElementById('photo');
 const retryButton = document.getElementById('retry');
 const download = document.getElementById('download');
@@ -547,17 +547,36 @@ function finish() {
     wpm.textContent = 'WPM：' + getWpm();
 
     // 写真表示
-    if (usedPhoto.every((i) => true)) {
-        usedPhoto.fill(false);
+    if (getLevel() == "S") {
+        for (let i=0; i<numberOfPhotos; i++) {
+            // 写真が５枚並んだら改行
+            if (i % 5 == 0) {
+                let newLine = document.createElement("br");
+                photoArea_S.appendChild(newLine);
+            }
+            let photos = document.createElement("img");
+            photos.src = "img/" + i + ".jpg";
+            let link = document.createElement("a");
+            link.href = photos.src;
+            link.download = i + ".jpg";
+            let linkArea = photoArea_S.appendChild(link);
+            photos.style.height = "20vh";
+            photos.style.margin = "10px";
+            linkArea.appendChild(photos);
+        }
+    } else {
+        if (usedPhoto.every((i) => true)) {
+            usedPhoto.fill(false);
+        }
+        while (true) {
+            rnd = Math.floor(Math.random() * numberOfPhotos);
+            if (!usedPhoto[rnd]) break;
+        }
+        usedPhoto[rnd] = true;
+        url = "img/" + rnd + ".jpg";
+        photo.src = url;
+        download.innerHTML = "<a href=" + url + " download>画像をダウンロード</a>";
     }
-    while (true) {
-        rnd = Math.floor(Math.random() * numberOfPhotos);
-        if (!usedPhoto[rnd]) break;
-    }
-    url = "img/" + rnd + ".jpg"
-    photo.src = url;
-    usedPhoto[rnd] = true;
-    download.innerHTML = "<a href=" + url + " download>画像をダウンロード</a>";
 
     retryButton.style.display = "block";
 
@@ -587,7 +606,11 @@ function retry() {
     accuracyRate.textContent = '';
     wpm.textContent = '';
     level.textContent = '';
-    photo.src = '';
+    if (lastLevel == "S") {
+        photoArea_S.innerHTML = '';
+    } else {
+        photo.src = '';
+    }
     download.innerHTML = "";
     subject.textContent = 'スペースキーを押して下さい';
     READYTIME = 4;
