@@ -512,7 +512,9 @@ function getWpm() {
 
 function getLevel() {
     switch(true) {
-        case time <= 20:
+        case time <= 15:
+            return 'S';
+        case 15 < time && time <= 20:
             return 'A';
         case 20 < time && time <= 30:
             return 'B';
@@ -562,7 +564,6 @@ function finish() {
     // レベル表示
     levelTableArea.style.display = "block";
     if (lastLevel != undefined) {
-        document.getElementById("last").innerHTML = "前回";
         lastLevelTable = document.getElementById('last_' + lastLevel);
         lastLevelTable.innerHTML = "→";
     }
